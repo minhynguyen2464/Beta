@@ -129,26 +129,36 @@
         }
     </script> -->
     <script>
+        // Get the form element by its ID
         const form = document.getElementById('userForm');
+    
+        // Add an event listener to the form for the 'submit' event
         form.addEventListener('submit', async function (e) {
+            // Prevent the default form submission behavior
             e.preventDefault();
+    
+            // Extract form data from input fields
             const formData = {
                 email: document.getElementById('email').value,
                 password: document.getElementById('password').value,
             };
-            console.log(formData);
+    
+            // Make a POST request to the '/login' endpoint using Axios
             axios.post('/login', formData)
                 .then((res) => {
+                    // Log response data to the console and display a success message
                     console.log('Response data:', res.data);
-                    alert("Đăng ký thành công")
+                    alert("Đăng ký thành công");
+                    // Reload the page after successful registration
                     window.location.reload(true);
                 })
                 .catch((err) => {
+                    // Log any errors to the console
                     console.error('Error:', err);
-                })
-        })
-
+                });
+        });
     </script>
+    
 </body>
 
 </html>
