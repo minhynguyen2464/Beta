@@ -18,7 +18,13 @@ router.post('/register', userController.postRegister);
 // Route to handle user logout
 router.get('/logout', userController.logout);
 
+router.get('/detail', userController.getMovieDetail);
+
 router.get('/movie', userController.getMovie);
+
+router.get('/account/edit', userController.getAccountEdit);
+
+router.put('/account/edit', userController.putAccountEdit);
 
 // Default route to render the index page
 router.get('/', (req, res) => {

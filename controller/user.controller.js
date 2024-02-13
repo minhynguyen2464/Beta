@@ -1,6 +1,7 @@
 // Importing bcrypt for password hashing and the User model
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const area = require('area-vn');
 const User = require('../models/user.model');
 const Movie = require('../models/movie.model');
 
@@ -81,14 +82,49 @@ const logout = (req, res) => {
 	});
 };
 
-const getMovie = async (req, res) => {
+const getMovieDetail = async (req, res) => {
 	try {
-		const movie = await Movie.findById('65cb2a7978471f1b84cfbed4'); //Example ID
+		const id = req.query.movie; // Use req.query.movie for query parameters
+		const movie = await Movie.findById(id); //Example ID
 		// Format date using moment
 		movie.releaseYear = moment(movie.releaseYear).format();
-		res.render('./users/movie', { movie: movie, moment: moment });
+		res.render('./users/movie-detail', { movie: movie, moment: moment });
 	} catch (err) {
 		res.status(500).json({ error: err });
+	}
+};
+
+const getMovie = async (req, res) => {
+	try {
+		const movies = await Movie.find();
+		//console.log(movies);
+		res.render('./users/movie', { movies: movies });
+	} catch (err) {
+		res.status(500).json({ error: err });
+	}
+};
+
+const getAccountEdit = async (req, res) => {
+	try {
+		const userID = req.session.userId;
+		const city = await area.getProvinces();
+		const user = await User.findById(userID);
+		res.render('./users/edit', { user: user, city: city });
+	} catch (err) {
+		res.status(500).json({ error: err });
+	}
+};
+
+const putAccountEdit = async (req, res) => {
+	try {
+		const userID = req.session.userID;
+		const data = req.body;
+		console.log(data);
+		if (await User.findOneAndUpdate(userID, data)) {
+			res.status(200).json({ messenge: 'Update complete' });
+		}
+	} catch (err) {
+		res.status(400).json({ error: err });
 	}
 };
 
@@ -99,5 +135,8 @@ module.exports = {
 	getRegister,
 	postRegister,
 	logout,
+	getMovieDetail,
 	getMovie,
+	getAccountEdit,
+	putAccountEdit,
 };

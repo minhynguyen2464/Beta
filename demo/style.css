@@ -22,7 +22,6 @@ li {
 
 li.active {
 	color: blue;
-	text-decoration: none;
 }
 
 #dateInfo {
@@ -97,7 +96,6 @@ li.active {
 .film-item {
 	border: none;
 	background-color: transparent;
-	margin-top: 3rem;
 }
 
 .film-item p {
@@ -105,7 +103,7 @@ li.active {
 }
 
 .film-poster {
-	max-width: 100%;
+	max-width: 90%;
 	height: auto;
 	border-radius: 8px;
 }
@@ -116,9 +114,6 @@ li.active {
 
 .movie-title {
 	color: rgb(51, 122, 183);
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
 }
 
 .sidebar {

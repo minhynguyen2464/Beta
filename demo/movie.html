@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -75,45 +75,57 @@
     <section style="background-color: #f8f8f8;">
         <hr>
         <div class="container mt-4 section">
-            <div class="row d-flex justify-content-center">
-                <div class="text-center">
-                    <ul class="nav nav-tabs tab-films ">
-                        <li>
-                            <a href="">
-                                <h1>PHIM SẮP CHIẾU</h1>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="">
-                                <h1>PHIM ĐANG CHIẾU</h1>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
             <div class="row">
-                <% for( let index=0; index < movies.length; index++ ) { %>
-                    <div class="col-md-3 film-item">
-                        <img src="./images/<%= movies[index].poster %>" alt="Film 1 Poster" class="film-poster">
-                        <h5 class="mt-2 movie-title">
-                            <%= movies[index].title %>
-                        </h5>
-                        <p><strong>Thể loại:</strong>
-                            <%=movies[index].genre.join(', ') %>
-                        </p>
-                        <p><strong>Thời lượng:</strong>
-                            <%= movies[index].duration %> phút
-                        </p>
-                        <button class="btn btn-primary btn-block buy-ticket-btn">
-                            <a href="/detail?movie=<%=  movies[index]._id%>" style="text-decoration:none;color:white;"><i class="fa-solid fa-cart-shopping"></i> Mua vé</a>
-                        </button>
+                <nav class="col-md-2 d-none d-md-block sidebar">
+                    <a href="#home">Thông tin chung</a>
+                    <a href="#about">Chi tiết tài khoản</a>
+                    <a href="#services">Điểm thưởng</a>
+                    <a href="#contact">Lịch sử giao dịch</a>
+                </nav>
+
+                <main role="main" class="col-md-10 ml-sm-auto col-lg-10 px-md-4 content text-center">
+                    <h2>THÔNG TIN CHUNG</h2>
+                    <div class="text-left">
+                        <p><strong>Xin chào Nguyễn Minh Ý,</strong></p>
+                        <p>Với trang này, bạn sẽ quản lý được tất cả thông tin tài khoản của mình</p>
+                        <div class="row box-account">
+
+                            <div class="col-xl-4" style="border-right: 1px solid black;">
+                                <p>Cấp độ thẻ: <strong class="box-account-right">Bạc</strong></p>
+                                <p>Tổng chi tiêu: <strong class="box-account-right">0đ</strong></p>
+                                <p>Điểm Beta: <strong class="box-account-right">0P</strong></p>
+                            </div>
+                            <div class="col-xl-2 box-account-item" style="border-right: 1px solid black;">
+                                <p>Thẻ quà tặng</p>
+                                <p><strong>0 đ</strong></p>
+                                <button type="button" class="btn btn-primary">Xem</button>
+                            </div>
+                            <div class="col-xl-2 box-accoun box-account-item" style="border-right: 1px solid black;">
+                                <p>Voucher</p>
+                                <p><strong>0</strong></p>
+                                <button type="button" class="btn btn-primary">Xem</button>
+                            </div>
+                            <div class="col-xl-2 box-account-item" style="border-right: 1px solid black;">
+                                <p>Coupon</p>
+                                <p><strong>0</strong></p>
+                                <button type="button" class="btn btn-primary">Xem</button>
+                            </div>
+                            <div class="col-xl-2 box-account-item">
+                                <p>Thẻ thành viên</p>
+                                <p><strong>0</strong></p>
+                                <button type="button" class="btn btn-primary">Xem</button>
+                            </div>
+
+                        </div>
+                        <h5>Thông tin tài khoản</h5>
+                        <hr>
+                        <p>LIÊN HỆ</p>
+                        <p>Tên: Nguyễn Minh Ý</p>
+                        <p>Email: minhynguyen97@gmail.com</p>
+                        <p>Điện thoại: 0586150623</p>
                     </div>
-
-                    <% } %>
-
+                </main>
             </div>
-            <ul id="dateInfo"></ul>
 
             <!-- Footer -->
 
