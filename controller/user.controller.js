@@ -84,49 +84,68 @@ const logout = (req, res) => {
 
 const getMovieDetail = async (req, res) => {
 	try {
+		// Extracting the movie ID from the query parameters
 		const id = req.query.movie; // Use req.query.movie for query parameters
-		const movie = await Movie.findById(id); //Example ID
-		// Format date using moment
+		// Fetching the movie details based on the provided ID
+		const movie = await Movie.findById(id); // Example ID
+		// Formatting the releaseYear using the moment library
 		movie.releaseYear = moment(movie.releaseYear).format();
+		// Rendering the movie detail page with the retrieved data
 		res.render('./users/movie-detail', { movie: movie, moment: moment });
 	} catch (err) {
+		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err });
 	}
 };
+
 
 const getMovie = async (req, res) => {
 	try {
+		// Fetching all movies from the database
 		const movies = await Movie.find();
-		//console.log(movies);
+		// Rendering the movie page with the retrieved movie data
 		res.render('./users/movie', { movies: movies });
 	} catch (err) {
+		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err });
 	}
 };
+
 
 const getAccountEdit = async (req, res) => {
 	try {
+		// Extracting the user ID from the session
 		const userID = req.session.userId;
+		// Fetching provinces for city selection
 		const city = await area.getProvinces();
+		// Fetching user details based on the user ID
 		const user = await User.findById(userID);
+		// Rendering the edit page with user and city data
 		res.render('./users/edit', { user: user, city: city });
 	} catch (err) {
+		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err });
 	}
 };
 
+
 const putAccountEdit = async (req, res) => {
 	try {
+		// Extracting user ID from the session
 		const userID = req.session.userID;
 		const data = req.body;
 		console.log(data);
+		// Updating user data based on the user ID
 		if (await User.findOneAndUpdate(userID, data)) {
-			res.status(200).json({ messenge: 'Update complete' });
+			// Sending a success response if the update is complete
+			res.status(200).json({ message: 'Update complete' });
 		}
 	} catch (err) {
+		// Handling errors and sending a 400 status code with an error message
 		res.status(400).json({ error: err });
 	}
 };
+
 
 // Exporting the controller functions
 module.exports = {

@@ -18,12 +18,16 @@ router.post('/register', userController.postRegister);
 // Route to handle user logout
 router.get('/logout', userController.logout);
 
+// Route to handle fetching and rendering movie details
 router.get('/detail', userController.getMovieDetail);
 
+// Route to handle fetching and rendering the movie page
 router.get('/movie', userController.getMovie);
 
+// Route to handle fetching and rendering the account edit page
 router.get('/account/edit', userController.getAccountEdit);
 
+// Route to handle updating user account information
 router.put('/account/edit', userController.putAccountEdit);
 
 // Default route to render the index page
