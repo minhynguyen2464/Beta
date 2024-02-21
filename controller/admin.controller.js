@@ -54,5 +54,56 @@ const postMovie = async (req, res) => {
 	}
 };
 
+const getShowtimes = async (req,res,next)=>{
+	try{
+		const movieID = req.query.movie;
+		const movie = await Movie.findById(movieID);
+		if (movie === null) {
+			movie.title = '';
+			movie.duration = '';
+			movie.director = '';
+		}		  
+		res.render('./admin/showtime',{movie: movie})
+	}
+	catch(err){
+		res.status(400).json({error: 'Get showtimes failed. Please try again.'})
+	}
+}
+
+const postShowtimes = async(req,res,next)=>{
+	try{
+		const data = req.body;
+		//console.log(data);
+		const showtimeData =[];
+		for(let i=0; i<data.length;i++){
+			const showtimeObject = {
+				time: data[i].showtime,
+				seatsAvailable: data[i].seatAvailable,
+				cinemaRoom: data[i].cinemaRoom,
+			};
+			showtimeData.push(showtimeObject);
+		}
+		console.log(showtimeData); //Pass
+		
+		const title = data[0].movieTitle;
+		//const newShowtime = new Showtime(showtimeData)
+		const movie = await Movie.findOneAndUpdate(
+			{ title: title },
+			//{ $set: { showtimes: showtimeData } }, Use if want to update
+			{ $push: { showtimes: { $each: showtimeData } } },
+			{ new: true }
+		  );
+	  
+		  if (movie) {
+			res.status(200).json({ message: 'Update complete', movie: movie });
+		  } else {
+			res.status(404).json({ error: 'Movie not found' });
+		  }
+	}
+	catch(err){
+		res.status(400).json({error: 'Post showtimes failed. Please try again.'})
+	}
+}
+
 // Exporting the controller functions
-module.exports = { getMovie, postMovie };
+module.exports = { getMovie, postMovie,getShowtimes, postShowtimes };

@@ -212,7 +212,13 @@
                 const row = tableBody.insertRow();
                 // Add cells with movie data
                 const path = '../images/' + movie.poster
-                row.insertCell().textContent = 1;
+                // Create an <a> tag
+                const link = document.createElement('a');
+                link.href = './addShowtimes?movie='+movie._id;  // Set the href attribute to your desired URL
+                link.textContent = '1';  // Set the text content of the <a> tag
+
+                // Insert the <a> tag into the first cell of the row
+                row.insertCell().appendChild(link);
                 row.insertCell().textContent = movie.title;
                 row.insertCell().textContent = movie.director;
                 row.insertCell().textContent = movie.cast.join(', ');

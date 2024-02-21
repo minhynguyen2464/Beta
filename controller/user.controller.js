@@ -87,10 +87,11 @@ const getMovieDetail = async (req, res) => {
 		// Extracting the movie ID from the query parameters
 		const id = req.query.movie; // Use req.query.movie for query parameters
 		// Fetching the movie details based on the provided ID
-		const movie = await Movie.findById(id); // Example ID
+		const movie = await Movie.findById(id)
 		// Formatting the releaseYear using the moment library
 		movie.releaseYear = moment(movie.releaseYear).format();
 		// Rendering the movie detail page with the retrieved data
+
 		res.render('./users/movie-detail', { movie: movie, moment: moment });
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message

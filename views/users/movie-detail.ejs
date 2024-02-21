@@ -97,7 +97,7 @@
                         <p><strong>THỂ LOẠI:</strong> <%= movie.genre.join(' , ') %></p>
                         <p><strong>THỜI LƯỢNG: </strong><%= movie.duration %> phút</p>
                         <p><strong>NGÔN NGỮ: </strong><%= movie.language %></p>
-                        <p><strong>NGÀY KHỞI CHIẾU: </strong><%= moment(movie.releaseYear).format(' DD/MM/YYYY') %>
+                        <p><strong>NGÀY KHỞI CHIẾU: </strong><%= moment(movie.releaseYear).format('DD/MM/YYYY') %>
                     </p>
 
 
@@ -108,21 +108,19 @@
             <div class="col-lg-16">
                 <h5 style="font-weight: bold;" class="pl-3">2D PHỤ ĐỀ</h5>
                 <div class="row">
-                    <div class="col-lg-2 text-center">
-                        <button type="button" class="btn btn-light"
-                            style="width: 100%; background-color:#D3D3D3">18:40</button>
-                        <div style="font-size: smaller;">113 ghế trống</div>
-                    </div>
-                    <div class="col-lg-2 text-center">
-                        <button type="button" class="btn btn-light"
-                            style="width: 100%; background-color:#D3D3D3">18:40</button>
-                        <div style="font-size: smaller;">113 ghế trống</div>
-                    </div>
-                    <div class="col-lg-2 text-center">
-                        <button type="button" class="btn btn-light"
-                            style="width: 100%; background-color:#D3D3D3">18:40</button>
-                        <div style="font-size: smaller;">113 ghế trống</div>
-                    </div>
+                    <%
+                        // Sort the showtimes array based on the 'time' property
+                        movie.showtimes.sort((a, b) => new Date(a.time) - new Date(b.time));
+                        %>
+
+                        <% for(let i = 0; i < movie.showtimes.length; i++) { %>
+                            <div class="col-lg-2 text-center" id="<%= moment(movie.showtimes[i].time).format('DD/M') %>">
+                                <button type="button" class="btn btn-light" style="width: 100%; background-color:#D3D3D3">
+                                    <%= moment(movie.showtimes[i].time).format('HH:mm') %>
+                                </button>
+                                <div style="font-size: smaller;"><%= movie.showtimes[i].seatsAvailable %> ghế trống</div>
+                            </div>
+                        <% } %>
                 </div>
             </div>
             <!-- Footer -->
@@ -139,20 +137,105 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dateInfo = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']; 
+            var ul = document.getElementById('dateInfo'); 
+            for (var i = 0; i < 7; i++) {
+                var currentDate = new Date(); 
+                currentDate.setDate(currentDate.getDate() + i); 
+                var currentDay = currentDate.getDay(); 
+                var currentMonth = currentDate.getMonth() + 1; 
+                var dateString = `${currentDate.getDate()}/${currentMonth} - ${dateInfo[currentDay]}`; 
+                var li = document.createElement('li'); 
+                let a = document.createElement('a');
+                a.id = `movieDate${i}`;
+                a.name = `${currentDate.getDate()}/${currentMonth}`;
+                a.href = `#${currentDate.getDate()}`; 
+                a.textContent = dateString;
+                li.appendChild(a); 
+                ul.appendChild(li);
+    
+                a.addEventListener("click", function() {
+                    var dateValue = a.name.toString();
+                    // Select all div elements with id '21/02'
+                    console.log(dateValue);
+                    var divs = document.querySelectorAll(`div[id]:not([id="${dateValue}"])`);
+                    // Loop through each selected div and set the display property to 'block'
+                    divs.forEach(function(div) {    
+                        div.style.display = 'none';
+                    });
+                    
+                });
+            }
+            
+        });
+    </script> -->
     <script>
-        document.addEventListener(' DOMContentLoaded', function () {
-            var dateInfo = ['CN', 'T2', 'T3', 'T4', 'T5'
-                , 'T6', 'T7']; var ul = document.getElementById('dateInfo'); for (var i = 0; i < 7; i++) {
-                    var
-                        currentDate = new Date(); currentDate.setDate(currentDate.getDate() + i); var
-                            currentDay = currentDate.getDay(); // 0 for Sunday, 1 for Monday, etc. var
-                    currentMonth = currentDate.getMonth() + 1; // Months are zero-based, so we add 1. var
-                    dateString = `${currentDate.getDate()}/${currentMonth} - ${dateInfo[currentDay]}`; var
-                        li = document.createElement('li'); //li.textContent=dateString; var
-                    a = document.createElement('a'); a.href = `#${currentDate.getDate()}`; a.textContent = dateString;
-                    li.appendChild(a); ul.appendChild(li);
+        document.addEventListener('DOMContentLoaded', function () {
+            var dateInfo = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+            var ul = document.getElementById('dateInfo');
+            var noShowtimeParagraph;
+            var defaultDayIndex = 0; // Set the index of the default day
+    
+            for (var i = 0; i < 7; i++) {
+                var currentDate = new Date();
+                currentDate.setDate(currentDate.getDate() + i);
+                var currentDay = currentDate.getDay();
+                var currentMonth = currentDate.getMonth() + 1;
+                var dateString = `${currentDate.getDate()}/${currentMonth} - ${dateInfo[currentDay]}`;
+                var li = document.createElement('li');
+                let a = document.createElement('a');
+                a.id = `movieDate${i}`;
+                a.name = `${currentDate.getDate()}/${currentMonth}`;
+                a.href = `#${currentDate.getDate()}`;
+                a.textContent = dateString;
+                li.appendChild(a);
+                ul.appendChild(li);
+    
+                a.addEventListener("click", function (event) {
+                    event.preventDefault(); // prevent the default behavior of the anchor tag
+                    var clickedDate = event.currentTarget.name.toString();
+    
+                    // Select all div elements with id attribute
+                    var allDivs = document.querySelectorAll(`div[id]`);
+    
+                    // Check if there are div elements with the specified ID
+                    var divExists = false;
+                    allDivs.forEach(function (div) {
+                        if (div.id === clickedDate) {
+                            div.style.display = 'block';
+                            divExists = true;
+                        } else {
+                            div.style.display = 'none';
+                        }
+                    });
+    
+                    // If no div element exists and no paragraph has been created, create and append a paragraph element
+                    if (!divExists && !noShowtimeParagraph) {
+                        noShowtimeParagraph = document.createElement('p');
+                        noShowtimeParagraph.textContent = "Không có suất chiếu.";
+                        ul.parentNode.appendChild(noShowtimeParagraph);
+                    } else if (divExists && noShowtimeParagraph) {
+                        // If div exists, remove the previously created paragraph
+                        noShowtimeParagraph.parentNode.removeChild(noShowtimeParagraph);
+                        noShowtimeParagraph = null;
+                    }
+                });
+    
+                // Set the default day
+                if (i === defaultDayIndex) {
+                    var defaultDayDiv = document.getElementById(`movieDate${i}`);
+                    if (defaultDayDiv) {
+                        defaultDayDiv.click();
+                    }
                 }
-        }); </script>
+            }
+        });
+    </script>
+    
+    
+    
 </body>
 
 </html>

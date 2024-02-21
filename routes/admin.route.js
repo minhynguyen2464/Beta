@@ -32,5 +32,9 @@ router.post(
 	movieController.postMovie
 );
 
+router.get('/admin/addShowtimes', movieController.getShowtimes);
+
+router.post('/admin/addShowtimes',movieController.postShowtimes)
+
 // Exporting the router
 module.exports = router;
