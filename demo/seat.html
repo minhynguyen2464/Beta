@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		/>
+		<style>
+			.seat {
+				width: 25px;
+				height: 25px;
+				margin: 2px;
+				text-align: center;
+				line-height: 25px;
+				cursor: pointer;
+				border: 1px solid #28a745; /* Green border for normal seats */
+				box-sizing: border-box;
+				font-size: 10px;
+			}
+
+			.vip {
+				border: 1px solid #dc3545; /* Red border for VIP seats */
+			}
+
+			.unavailable {
+				border: #bbbbbb;
+				background-color: #bbbbbb; /* Gray background for unavailable seats */
+				color: white;
+				cursor: not-allowed;
+			}
+            .none{
+                border: none;
+                background-color: white;
+                cursor: default;
+            }
+			.break {
+				border: none;
+				flex-basis: 100%;
+				height: 0;
+			}
+
+			.selected {
+				background-color: #b11500;
+				color: #fff;
+			}
+
+			.box-seat {
+				width: 25px;
+				height: 25px;
+				margin: 2px;
+				cursor: pointer;
+				border: 1px solid #28a745; /* Green border for normal seats */
+				box-sizing: border-box;
+				font-size: 10px;
+				float: left;
+			}
+			.description-box {
+				margin-top: 20px;
+				margin-left: 25%;
+            }
+            
+            .description-item{
+                float: left;
+                width: 25px;
+                height: 25px;
+                margin: 2px;
+                text-align: center;
+                line-height: 25px;
+                cursor: pointer;
+                border: 1px solid #28a745; /* Green border for normal seats */
+                box-sizing: border-box;
+                font-size: 10px;
+            }
+            
+            .description-box p {
+                float: left;
+                margin: 0 10px;
+            }
+			.bottom-content{
+				margin-top: 20px;
+				padding: 10px;
+				background-color: black;
+				color: #CCCCCC;
+				font-size: 13px;
+			}
+			.bottom-content ul{
+				list-style: none;
+			}
+			.bottom-content button{
+				height: 60%;
+				font-weight: bolder;
+			}
+			.page-title{
+				color: white;
+				background-color: black;
+				text-align: center;
+				padding: 5px;
+			}
+			.page-title h1{
+				font-size: 20px;
+				font-weight: bolder;
+			}
+			.top-content{
+				padding: 10px;
+				font-weight: bold;
+				border-bottom: 1px solid #CCCC;
+				margin-bottom: 20px;
+				background-color: #FDFCF0;
+				font-size: 14px;
+			}
+			.top-content p{
+				margin: 0;
+			}
+		</style>
+		<title>Movie Seat Selection</title>
+	</head>
+	<body>
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col-lg-12" style="border: 1px solid #CCCC; padding:0px">
+					<div class="page-title">
+						<h1>BOOKING ONLINE</h1>
+					</div>
+					<div class="top-content">
+						<p>CGV Hùng Vương Plaza | 4DX | Số ghế (137/144)</p>
+						<p>18/02/2024 09:50 ~ 18/02/2024 12:03</p>
+					</div>
+					<div class="seat-image" style="margin-bottom: 60px;">
+						<img src="https://www.cgv.vn/skin/frontend/cgv/default/images/bg-cgv/bg-screen.png" alt="" width="100%">
+					</div>
+					<div id="seat-map" class="d-flex flex-wrap justify-content-center"></div>
+					<div class="description-box" style="">
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="description-item mr-2" style="background-color: #b11500; border:0px"></div>
+								<p>Checked</p>
+								<div class="description-item mr-2" style="clear: both; background-color: #bbbbbb; border:0px"></div>
+								<p>Đã chọn</p>
+								<div class="description-item" style="clear: both; background-color: #bbbbbb; color:#fff; border:0px; font-size:15px;">X</div>
+								<p>Không thể chọn</p>
+							</div>
+							<div class="col-lg-6">
+								<div class="description-item mr-2" style="clear: both;"></div>
+								<p>Thường</p>
+								<div class="description-item mr-2" style="clear: both; border: 1px solid #dc3545;"></div>
+								<p>VIP</p>
+								<!-- Add more description items as needed -->
+							</div>
+						</div>
+					</div>
+					<div class="bottom-content">
+						<div class="row">
+							<div class="col-md-2">
+								<button class="btn btn-danger" id="" style="width: 100%;">PREVIOUS</button>
+							</div>
+							<div class="col-md-1">
+								<img src="./media_images_2024_01_26_trang-133650-260124-79.jpg" alt="" width="100%">
+							</div>
+							<div class="col-md-2">
+								<ul>
+									<li>GIA ĐÌNH x ĐIỆP VIÊN MÃ: TRẮNG</li>
+									<li>2D</li>
+									<li>T13</li>
+								</ul>
+							</div>
+							<div class="col-md-2">
+								<ul>
+									<li>Rạp chiếu: <strong>CGV Vincom Bắc Từ Liêm</strong></li>
+									<li>Suất chiếu: <strong>23:20, 17/02/2024</strong></li>
+									<li>Phòng chiếu: <strong>Cinema 1</strong></li>
+									<li>Ghế: <strong>L9, L6</strong></li>
+								</ul>
+							</div>
+							<div class="col-md-3">
+								<ul>
+									<li>Tên phim:<strong> 0,00 ₫</strong></li>
+									<li>Combo:<strong> 0,00 ₫</strong></li>
+									<li>Tổng thanh toán:<strong> 0,00 ₫</strong></li>
+								</ul>
+							</div>
+							<div class="col-md-2">
+								<button class="btn btn-primary" id="checkoutBtn" style="width: 100%;">NEXT</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script>
+			const seats = [
+            "Q88","Q88", "Q88", "A7", "A6", "A5", "A4", "A3", "A2", "A1", "Q88",'br',
+            "Q88", "Q88", "Q88", "B8", "B7", "B6", "B5", "B4", "B3", "B2", "Q88",'br',
+            "C10", "C9", "Q88", "C8", "C7", "C6", "C5", "C4", "C3", "C2", "Q88",'br',
+            "D10", "D9", "Q88", "D8", "D7", "D6", "D5", "D4", "D3", "D2", "Q88", 'br',
+           "E10", "E9", "Q88", "E8", "E7", "E6", "E5", "E4", "E3", "E2", "Q88", 'br',
+           "F10", "F9", "Q88", "F8", "F7", "F6", "F5", "F4", "F3", "F2", "Q88", 'br',
+           "G10", "G9", "Q88", "G8", "G7", "G6", "G5", "G4", "G3", "G2", "Q88", 'br',
+            "H10", "H9", "Q88", "H8", "H7", "H6", "H5", "H4", "H3", "H2", "Q88", 'br',
+           "J10", "J9", "Q88", "J8", "J7", "J6", "J5", "J4", "J3", "J2", "Q88", 'br',
+            "K10", "K9", "Q88", "K8", "K7", "K6", "K5", "K4", "K3", "K2", "Q88",'br',
+			    // Add more seats as needed
+			];
+
+			const seatMap = document.getElementById('seat-map');
+			const checkoutBtn = document.getElementById('checkoutBtn');
+			const vipSeat = ['E','F','G','H','I','J','K']
+			const disableSeat = ['A1','A2','J5','J6']
+			seats.forEach(seat => {
+			    const seatElement = document.createElement('div');
+			    seatElement.classList.add('seat');
+
+			    if (disableSeat.includes(seat)) {
+			        seatElement.classList.add('unavailable');
+			        seatElement.textContent = seat;
+			    } else if (seat === 'br') {
+			        seatElement.classList.add('break');
+			    }else if(seat==='Q88'){
+                    seatElement.classList.add('none');
+			    }
+			    else {
+			        seatElement.textContent = seat;
+			                // Set additional styles for VIP seats
+			        if (vipSeat.some(prefix => seat.startsWith(prefix))) {
+			            seatElement.classList.add('vip');
+			        }
+			    }
+
+			    seatMap.appendChild(seatElement);
+
+			    if (seat !== 'Q88' && seat !== 'br') {
+			        seatElement.addEventListener('click', () => toggleSeat(seatElement));
+			    }
+			});
+
+			function toggleSeat(seatElement) {
+			    seatElement.classList.toggle('selected');
+			}
+
+			checkoutBtn.addEventListener('click', () => {
+			    const selectedSeats = document.querySelectorAll('.seat.selected');
+			    const selectedSeatNumbers = Array.from(selectedSeats).map(seat => seat.textContent);
+			    alert('Selected Seats: ' + selectedSeatNumbers.join(', '));
+			});
+		</script>
+	</body>
+</html>

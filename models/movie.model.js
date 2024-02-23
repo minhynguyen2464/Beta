@@ -14,7 +14,7 @@ const showtimeSchema = mongoose.Schema({
 		required: true,
 	},
 	seatsBooked: [{
-		type: mongoose.Schema.Types.ObjectId, ref: 'Booking'
+		type: [String],
 	}],
 })
 

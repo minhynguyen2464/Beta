@@ -115,12 +115,14 @@
 
                         <% for(let i = 0; i < movie.showtimes.length; i++) { %>
                             <div class="col-lg-2 text-center" id="<%= moment(movie.showtimes[i].time).format('DD/M') %>">
-                                <button type="button" class="btn btn-light" style="width: 100%; background-color:#D3D3D3">
+                                <a href="/movie/seat?movie=<%= movie._id %>&showtime=<%= movie.showtimes[i]._id %>&user=65cbdeca43ca538c5571a9a9" class="btn btn-light" style="width: 100%; background-color:#D3D3D3">
                                     <%= moment(movie.showtimes[i].time).format('HH:mm') %>
-                                </button>
+                                </a>
                                 <div style="font-size: smaller;"><%= movie.showtimes[i].seatsAvailable %> ghế trống</div>
                             </div>
                         <% } %>
+                        
+                        
                 </div>
             </div>
             <!-- Footer -->
@@ -210,7 +212,7 @@
                             div.style.display = 'none';
                         }
                     });
-    
+                    
                     // If no div element exists and no paragraph has been created, create and append a paragraph element
                     if (!divExists && !noShowtimeParagraph) {
                         noShowtimeParagraph = document.createElement('p');

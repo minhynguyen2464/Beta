@@ -106,4 +106,9 @@ const postShowtimes = async(req,res,next)=>{
 }
 
 // Exporting the controller functions
-module.exports = { getMovie, postMovie,getShowtimes, postShowtimes };
+module.exports = { 
+	getMovie, 
+	postMovie,
+	getShowtimes, 
+	postShowtimes 
+};

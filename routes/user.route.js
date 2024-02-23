@@ -35,5 +35,9 @@ router.get('/', (req, res) => {
 	res.render('index');
 });
 
+router.get('/movie/seat', userController.getSeatSelect);
+
+router.post('/movie/seat',userController.postSeatSelect);
+
 // Exporting the router
 module.exports = router;

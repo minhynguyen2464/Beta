@@ -4,6 +4,8 @@ const moment = require('moment');
 const area = require('area-vn');
 const User = require('../models/user.model');
 const Movie = require('../models/movie.model');
+const Booking = require('../models/booking.model')
+const Showtime = require('../models/movie.model')
 
 // Controller function to render the login page
 const getLogin = (req, res) => {
@@ -147,6 +149,68 @@ const putAccountEdit = async (req, res) => {
 	}
 };
 
+const getSeatSelect = async(req,res)=>{
+	try{
+		const movieID = req.query.movie;  // Get the 'movie' parameter
+   		const showtimeID = req.query.showtime;  // Get the 'showtime' parameter
+		const movieShowtime = await Movie.findOne(
+		{
+			_id: movieID,
+			//"showtimes._id": showtimeID
+		},
+		{
+			title: 1,
+			poster: 1,
+			showtimes: {
+				$elemMatch: { _id: showtimeID }
+			}
+		}
+		);
+		res.render('./users/seat',{movieShowtime: movieShowtime,moment: moment});
+	}	
+	catch(err){
+		res.status(400).json({error:err});
+	}
+}
+
+const postSeatSelect = async(req,res)=>{
+	try{
+		const data = req.body;
+		//console.log(data);
+		const newBooking = new Booking({
+			user: data.user,
+			movie: data.movie,
+			showtimes: data.showtimes,
+			seats: data.seats,
+			cinema: 1,
+			seatsType: data.seatsType,
+			bookedAt: data.bookedAt,
+		})
+		if (await newBooking.save()) { //1 Query
+			const movie = await Movie.findById({_id: data.movie}); //2 Query
+			const showtime = await movie.showtimes.find(showtime => showtime._id.equals(data.showtimes)); //3 Query
+			// Convert string to object if needed
+			//console.log(typeof(showtime.seatsBooked));
+			console.log(showtime);
+			showtime.seatsBooked.push(data.seats);
+			showtime.seatsBooked = showtime.seatsBooked.flat();
+			console.log(showtime.seatsBooked);
+			// Showtime.findByIdAndUpdate(
+			// 	data.showtimes,
+			// 	{ $set: { seatsBooked: data.seats } },
+			// 	{ new: true } // Return the updated document	
+			// )			  
+			await movie.save() //4 Query
+			res.status(201).json(newBooking);
+		}else{
+			console.log(err);
+		}
+	}
+	catch(err){
+		res.status(400).json({error: err})
+	}
+}
+
 
 // Exporting the controller functions
 module.exports = {
@@ -159,4 +223,6 @@ module.exports = {
 	getMovie,
 	getAccountEdit,
 	putAccountEdit,
+	getSeatSelect,
+	postSeatSelect,
 };
