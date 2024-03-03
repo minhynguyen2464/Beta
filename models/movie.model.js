@@ -59,5 +59,4 @@ const movieSchema = mongoose.Schema({
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
-const Showtime = mongoose.model('Showtime',showtimeSchema);
-module.exports = Movie,Showtime;
+module.exports = Movie;

@@ -247,7 +247,7 @@
 			        seatElement.addEventListener('click', () => toggleSeat(seatElement));
 			    }
 			});
-
+			let totalPrice = 0;
 			let vipSeatCount = 0;
 			let standardSeatCount = 0;
 			const seatType = [];
@@ -292,7 +292,7 @@
 				// Set the price based on the total counts
 				const vipPrice = vipSeatCount * 129000;
 				const standardPrice = standardSeatCount * 99000;
-				const totalPrice = vipPrice + standardPrice;
+				totalPrice = vipPrice + standardPrice;
 
 				priceElement.innerText = (totalPrice > 0) ? ` ${totalPrice.toLocaleString('vi-VN')} ₫` : ' 0 ₫';
 				totalPriceElement.innerText = (totalPrice > 0) ? ` ${totalPrice.toLocaleString('vi-VN')} ₫` : ' 0 ₫';
@@ -354,12 +354,16 @@
 						seatsType: selectedSeatType,
 						bookedAt: new Date(),
 					};
+					const amount = 
 					axios.post('/movie/seat',formData)
 					.then((res)=>{
-						console.log('Response data:', res.data);
-						alert("Đặt vé thành công");
-						// Reload the page after successful registration
-						window.location.reload(true);
+						
+						//console.log('Response data:', res.data);
+						//alert("Đặt vé thành công")
+						//window.location.reload(true);
+						//res.data.totalPrice = totalPrice
+						window.location.href = `/order/create_payment_url?bookingID=${res.data._id}&price=${totalPrice}`;
+
 					})
 					.catch((err)=>{
 						console.error('Error:', err);

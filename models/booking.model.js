@@ -3,6 +3,7 @@ const User = require('./user.model')
 const Movie = require('./movie.model')
 const Showtime = require('./movie.model')
 
+
 const bookingSchema = new mongoose.Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId, ref:'User',
@@ -30,6 +31,15 @@ const bookingSchema = new mongoose.Schema({
     cinema:{
         type: String,
         required: true,
+    },
+    price:{
+        type: Number,
+    },
+    transactionDate:{
+        type: Date,
+    },
+    status:{
+        type: Number,
     }
 })
 

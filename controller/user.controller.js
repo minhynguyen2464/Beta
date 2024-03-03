@@ -5,7 +5,6 @@ const area = require('area-vn');
 const User = require('../models/user.model');
 const Movie = require('../models/movie.model');
 const Booking = require('../models/booking.model')
-const Showtime = require('../models/movie.model')
 
 // Controller function to render the login page
 const getLogin = (req, res) => {
@@ -93,7 +92,6 @@ const getMovieDetail = async (req, res) => {
 		// Formatting the releaseYear using the moment library
 		movie.releaseYear = moment(movie.releaseYear).format();
 		// Rendering the movie detail page with the retrieved data
-
 		res.render('./users/movie-detail', { movie: movie, moment: moment });
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
@@ -187,20 +185,18 @@ const postSeatSelect = async(req,res)=>{
 			bookedAt: data.bookedAt,
 		})
 		if (await newBooking.save()) { //1 Query
-			const movie = await Movie.findById({_id: data.movie}); //2 Query
-			const showtime = await movie.showtimes.find(showtime => showtime._id.equals(data.showtimes)); //3 Query
-			// Convert string to object if needed
-			//console.log(typeof(showtime.seatsBooked));
-			console.log(showtime);
-			showtime.seatsBooked.push(data.seats);
-			showtime.seatsBooked = showtime.seatsBooked.flat();
-			console.log(showtime.seatsBooked);
-			// Showtime.findByIdAndUpdate(
-			// 	data.showtimes,
-			// 	{ $set: { seatsBooked: data.seats } },
-			// 	{ new: true } // Return the updated document	
-			// )			  
-			await movie.save() //4 Query
+			// const movie = await Movie.findById({_id: data.movie}); //2 Query
+			// const showtime = await movie.showtimes.find(showtime => showtime._id.equals(data.showtimes)); //3 Query
+			// // Convert string to object if needed
+			// //console.log(typeof(showtime.seatsBooked));
+			// showtime.seatsBooked.push(data.seats);
+			// showtime.seatsBooked = showtime.seatsBooked.flat();
+			// // Showtime.findByIdAndUpdate(
+			// // 	data.showtimes,
+			// // 	{ $set: { seatsBooked: data.seats } },
+			// // 	{ new: true } // Return the updated document	
+			// // )			  
+			// await movie.save() //4 Query
 			res.status(201).json(newBooking);
 		}else{
 			console.log(err);
