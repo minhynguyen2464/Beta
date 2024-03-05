@@ -104,7 +104,7 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Thêm phim</button>
                     </form>
                 </div>
                 <div class="row">
@@ -118,6 +118,8 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th></th>
+                                            <th></th>
                                             <th>Title</th>
                                             <th>Director</th>
                                             <th>Cast</th>
@@ -215,10 +217,23 @@
                 // Create an <a> tag
                 const link = document.createElement('a');
                 link.href = './addShowtimes?movie='+movie._id;  // Set the href attribute to your desired URL
-                link.textContent = '1';  // Set the text content of the <a> tag
+                link.textContent = 'Add showtimes';  // Set the text content of the <a> tag
+                link.className = 'btn btn-success';
 
+                const deleteButton = document.createElement('a');
+                deleteButton.href = '';  // Set the href attribute to your desired URL
+                deleteButton.textContent = 'Delete';  // Set the text content of the <a> tag
+                deleteButton.className = 'btn btn-danger';
+
+                const updateButton = document.createElement('a');
+                updateButton.href = '';  // Set the href attribute to your desired URL
+                updateButton.textContent = 'Update';  // Set the text content of the <a> tag
+                updateButton.className = 'btn btn-warning';
+                updateButton.style.height = '100%';
                 // Insert the <a> tag into the first cell of the row
                 row.insertCell().appendChild(link);
+                row.insertCell().appendChild(deleteButton);
+                row.insertCell().appendChild(updateButton);
                 row.insertCell().textContent = movie.title;
                 row.insertCell().textContent = movie.director;
                 row.insertCell().textContent = movie.cast.join(', ');

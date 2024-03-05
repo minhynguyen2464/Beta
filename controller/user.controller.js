@@ -11,29 +11,46 @@ const getLogin = (req, res) => {
 	res.render('./users/login');
 };
 
+
+const loginValidate = (email,password)=>{
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	const passwordRegex = /^[^<>]{6,}$/;
+	if(!emailRegex.test(email)){
+		return 'Email không hợp lệ';
+	}
+	if(!passwordRegex.test(password)){
+		return 'Password không hợp lệ'
+	}
+	return null;
+}
+
 // Controller function to handle the login form submission
 const postLogin = async (req, res) => {
 	// Extracting email and password from the request body
 	const { email, password } = req.body;
-
-	try {
-		// Finding a user with the provided email in the database
-		const user = await User.findOne({ email });
-
-		// Checking if the user exists and the password is correct
-		if (user && (await bcrypt.compare(password, user.password))) {
-			// Setting the user ID in the session and sending a success response
-			req.session.userId = user._id;
-			res.status(200).json(user);
-		} else {
-			// Sending an error response if login fails
-			console.log('Failed');
-			res.status(400).json({ error: 'Login failed. Please try again.' });
+	const validationError  = loginValidate(email,password);
+	if(validationError){
+		res.status(400).json({error: validationError})
+	}
+	else{
+		try {
+			// Finding a user with the provided email in the database
+			const user = await User.findOne({ email });
+	
+			// Checking if the user exists and the password is correct
+			if (user && (await bcrypt.compare(password, user.password))) {
+				// Setting the user ID in the session and sending a success response
+				req.session.userId = user._id;
+				res.status(200).json(user);
+			} else {
+				// Sending an error response if login fails
+				res.status(400).json({ error: 'Login failed. Please try again.' });
+			}
+		} catch (error) {
+			// Handling errors and rendering the login page
+			console.error(error);
+			res.render('users/login');
 		}
-	} catch (error) {
-		// Handling errors and rendering the login page
-		console.error(error);
-		res.render('users/login');
 	}
 };
 
@@ -42,30 +59,63 @@ const getRegister = (req, res) => {
 	res.render('./users/register');
 };
 
+function validateUserData(data) {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	const phoneRegex = /^(0[0-9]{9})$/;
+	const nameRegex = /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/;
+	const passwordRegex = /^[^<>]{6,}$/;
+	// Kiểm tra định dạng email
+	if(!nameRegex.test(data.name)){
+		return 'Tên người dùng không hợp lệ';
+	}
+	if (!emailRegex.test(data.email)) {
+		return 'Email không hợp lệ';
+	}
+	if(!passwordRegex.test(data.password)){
+		return 'Mật khẩu không hợp lệ'
+	}
+	if(data.confirmPassword!=data.password){
+		return 'Mật khẩu không trùng khớp';
+	}
+	// Kiểm tra định dạng số điện thoại
+	if (!phoneRegex.test(data.phoneNumber)) {
+	  return 'Số điện thoại không hợp lệ';
+	}
+	// Nếu mọi thứ đều hợp lệ, trả về null hoặc một giá trị khác để chỉ ra sự thành công
+	return null;
+}
+
 // Controller function to handle the registration form submission
 const postRegister = async (req, res) => {
 	try {
 		// Extracting data from the request body
 		const data = req.body;
+		const validationError  = validateUserData(data)
+		if(validationError){
+			console.error(validationError);
+			res.status(400).json({ error: validationError });
+			//res.render('./users/register');
+		}
+		else{
+			// Generating a salt and hashing the password
+			const salt = await bcrypt.genSalt(10);
+			const hashedPassword = await bcrypt.hash(data.password, salt);
 
-		// Generating a salt and hashing the password
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(data.password, salt);
+			// Creating a new User instance with the hashed password
+			const newUser = new User({
+				name: data.name,
+				email: data.email,
+				password: hashedPassword,
+				dob: data.dob,
+				gender: data.gender,
+				phoneNumber: data.phoneNumber,
+			});
 
-		// Creating a new User instance with the hashed password
-		const newUser = new User({
-			name: data.name,
-			email: data.email,
-			password: hashedPassword,
-			dob: data.dob,
-			gender: data.gender,
-			phoneNumber: data.phoneNumber,
-		});
-
-		// Saving the new user to the database and checking if it was successful
-		if (await newUser.save()) {
-			console.log(newUser);
-			res.status(201).json(newUser);
+			// Saving the new user to the database and checking if it was successful
+			if (await newUser.save()) {
+				console.log(newUser);
+				res.status(201).json(newUser);
+			}
 		}
 	} catch (error) {
 		// Handling errors and sending an error response
@@ -185,18 +235,6 @@ const postSeatSelect = async(req,res)=>{
 			bookedAt: data.bookedAt,
 		})
 		if (await newBooking.save()) { //1 Query
-			// const movie = await Movie.findById({_id: data.movie}); //2 Query
-			// const showtime = await movie.showtimes.find(showtime => showtime._id.equals(data.showtimes)); //3 Query
-			// // Convert string to object if needed
-			// //console.log(typeof(showtime.seatsBooked));
-			// showtime.seatsBooked.push(data.seats);
-			// showtime.seatsBooked = showtime.seatsBooked.flat();
-			// // Showtime.findByIdAndUpdate(
-			// // 	data.showtimes,
-			// // 	{ $set: { seatsBooked: data.seats } },
-			// // 	{ new: true } // Return the updated document	
-			// // )			  
-			// await movie.save() //4 Query
 			res.status(201).json(newBooking);
 		}else{
 			console.log(err);

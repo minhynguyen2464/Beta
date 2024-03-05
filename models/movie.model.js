@@ -3,15 +3,12 @@ const mongoose = require('mongoose');
 const showtimeSchema = mongoose.Schema({
 	time:{
 		type: Date,
-		required: true,
 	},
 	seatsAvailable:{
 		type: Number,
-		required: true,
 	},
 	cinemaRoom:{
 		type: String,
-		required: true,
 	},
 	seatsBooked: [{
 		type: [String],
