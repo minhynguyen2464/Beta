@@ -133,21 +133,66 @@ const logout = (req, res) => {
 	});
 };
 
+// const getMovieDetail = async (req, res) => {
+// 	try {
+// 		const today = new Date();
+// 		// Extracting the movie ID from the query parameters
+// 		const id = req.query.movie; // Use req.query.movie for query parameters
+// 		// Fetching the movie details based on the provided ID
+// 		const movie = await Movie.findById(id) where showtimes.time $gt than today
+// 		// Formatting the releaseYear using the moment library
+// 		movie.releaseYear = moment(movie.releaseYear).format();
+// 		// Rendering the movie detail page with the retrieved data
+// 		res.render('./users/movie-detail', { movie: movie, moment: moment });
+// 	} catch (err) {
+// 		// Handling errors and sending a 500 status code with an error message
+// 		res.status(500).json({ error: err });
+// 	}
+// };
+
 const getMovieDetail = async (req, res) => {
 	try {
+		const today = new Date();
 		// Extracting the movie ID from the query parameters
 		const id = req.query.movie; // Use req.query.movie for query parameters
-		// Fetching the movie details based on the provided ID
-		const movie = await Movie.findById(id)
+		const userID = req.session.userId;
+		// Fetching the movie details based on the provided ID and showtimes greater than today
+		const movie = await Movie.findOne(
+		{
+			_id: id,
+		},
+		{
+			title: 1,
+			director: 1,
+			cast: 1,
+			genre: 1,
+			duration: 1,
+			language: 1,
+			releaseYear: 1,
+			description: 1,
+			poster: 1,
+			showtimes: { 
+				$elemMatch:{
+					'time': {$gt: today}
+				}
+			 }
+		});
+		// Checking if the movie is not found
+		if (!movie) {
+			return res.status(404).json({ error: 'Movie not found or no upcoming showtimes.' });
+		}
+
 		// Formatting the releaseYear using the moment library
 		movie.releaseYear = moment(movie.releaseYear).format();
+
 		// Rendering the movie detail page with the retrieved data
-		res.render('./users/movie-detail', { movie: movie, moment: moment });
+		res.render('./users/movie-detail', { movie, moment, userID });
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
-		res.status(500).json({ error: err });
+		res.status(500).json({ error: err.message });
 	}
 };
+
 
 
 const getMovie = async (req, res) => {
@@ -183,7 +228,7 @@ const getAccountEdit = async (req, res) => {
 const putAccountEdit = async (req, res) => {
 	try {
 		// Extracting user ID from the session
-		const userID = req.session.userID;
+		const userID = req.session.userId;
 		const data = req.body;
 		console.log(data);
 		// Updating user data based on the user ID
@@ -223,27 +268,112 @@ const getSeatSelect = async(req,res)=>{
 
 const postSeatSelect = async(req,res)=>{
 	try{
-		const data = req.body;
-		//console.log(data);
-		const newBooking = new Booking({
-			user: data.user,
-			movie: data.movie,
-			showtimes: data.showtimes,
-			seats: data.seats,
-			cinema: 1,
-			seatsType: data.seatsType,
-			bookedAt: data.bookedAt,
-		})
-		if (await newBooking.save()) { //1 Query
-			res.status(201).json(newBooking);
-		}else{
-			console.log(err);
+		const userID = req.session.userId;
+		console.log(userID);
+		if(userID){
+			const data = req.body;
+			//console.log(data);
+			const newBooking = new Booking({
+				user: userID,
+				movie: data.movie,
+				showtimes: data.showtimes,
+				seats: data.seats,
+				cinema: 1,
+				seatsType: data.seatsType,
+				bookedAt: data.bookedAt,
+			})
+			if (await newBooking.save()) { //1 Query
+				res.status(201).json(newBooking);
+			}
+			else {
+				console.log(err);
+			}
 		}
+		else{ //Nếu không có sessionID trở về trang đâng nhập
+			res.render('./users/login');
+		}
+		
 	}
 	catch(err){
 		res.status(400).json({error: err})
 	}
 }
+
+// const getAccountHistory = async (req, res) => {
+//     try {
+//         const userID = req.session.userId;
+
+//         if (userID) {
+//             // Use await to wait for the promise to resolve
+//             const bookingHistory = await Booking.find({ user: userID });
+// 			const movie = await Movie.findById({
+// 				_id: bookingHistory.movie,
+// 			},
+// 			{
+// 				title: 1,
+// 				showtimes: {
+// 					$elemMatch: { _id: bookingHistory.showtimes }
+// 				}
+// 			})
+//             // Check if bookingHistory is an empty array
+//             if (bookingHistory.length === 0) {
+//                 // Handle the case where no booking history is found
+//                 console.log("No booking history found for user:", userID);
+//                 // You might want to redirect or render a specific view for this case
+//                 return res.render('./users/no-history');
+//             }
+// 			console.log(movie);
+//             res.render('./users/history', { bookingHistory, movie });
+//         } else {
+//             res.render('./users/login');
+//         }
+//     } catch (err) {
+//         res.status(400).json({ error: err.message });
+//     }
+// };
+
+const getAccountHistory = async (req, res) => {
+    try {
+        const userID = req.session.userId;
+
+        if (userID) {
+            // Use await to wait for the promise to resolve
+            const bookingHistory = await Booking.find({ user: userID });
+            let moviePromises = [];
+
+            // Loop through each booking to retrieve movie information
+            for (const booking of bookingHistory) {
+                const moviePromise = Movie.findById(
+                    { _id: booking.movie },
+                    {
+                        title: 1,
+                        showtimes: {
+                            $elemMatch: { _id: booking.showtimes }
+                        }
+                    }
+                );
+                moviePromises.push(moviePromise);
+            }
+
+            // Wait for all movie promises to resolve
+            const movies = await Promise.all(moviePromises);
+            // Check if bookingHistory is an empty array
+            if (bookingHistory.length === 0) {
+                // Handle the case where no booking history is found
+                console.log("No booking history found for user:", userID);
+                // You might want to redirect or render a specific view for this case
+                return res.render('./users/history', { bookingHistory, movies, moment:moment });
+            }
+
+            res.render('./users/history', { bookingHistory, movies, moment:moment });
+        } else {
+            res.render('./users/login');
+        }
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
 
 
 // Exporting the controller functions
@@ -259,4 +389,5 @@ module.exports = {
 	putAccountEdit,
 	getSeatSelect,
 	postSeatSelect,
+	getAccountHistory,
 };

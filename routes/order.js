@@ -121,7 +121,7 @@ router.get('/vnpay_return', function (req, res, next) {
             let orderId = req.query.vnp_TxnRef;
             const query = {_id:orderId};
             const update = {
-                price: vnp_Params['vnp_Amount'],
+                price: vnp_Params['vnp_Amount']/100,
                 transactionDate: new Date(),
                 status: 1
             };

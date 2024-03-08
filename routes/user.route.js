@@ -30,14 +30,18 @@ router.get('/account/edit', userController.getAccountEdit);
 // Route to handle updating user account information
 router.put('/account/edit', userController.putAccountEdit);
 
+router.get('/account/history',userController.getAccountHistory);
+
+
+router.get('/movie/seat', userController.getSeatSelect);
+
+router.post('/movie/seat',userController.postSeatSelect);
+
 // Default route to render the index page
 router.get('/', (req, res) => {
 	res.render('index');
 });
 
-router.get('/movie/seat', userController.getSeatSelect);
-
-router.post('/movie/seat',userController.postSeatSelect);
 
 // Exporting the router
 module.exports = router;
