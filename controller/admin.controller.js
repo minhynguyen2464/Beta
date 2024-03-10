@@ -1,6 +1,6 @@
 // Importing the Movie model
 const Movie = require('../models/movie.model');
-
+const moment = require('moment')
 // Controller function to get all movies
 const getMovie = async (req, res) => {
 	try {
@@ -105,10 +105,66 @@ const postShowtimes = async(req,res,next)=>{
 	}
 }
 
+const deleteMovie = (async (req,res)=>{
+	try{
+		const movieID = req.query.movie;
+		const query = {_id:movieID}
+		if(await Movie.deleteOne(query)){
+			res.status(200).json({message: 'Delete successfully'});
+		}
+		else{
+			res.status(400).json({error: 'Delete error'});
+		}
+		
+	}
+	catch(err){
+		res.status(400).json({error: err});
+	}
+})
+
+const getUpdateInfo = (async(req,res)=>{
+	try{
+		const movieID = req.query.movie;
+		const query = {_id:movieID};
+		const movie = await Movie.findOne(query)
+		if(movie){
+			res.status(200).json(movie);
+
+		}	
+		else{
+			res.status(400).json({error: 'Update error'});
+		}
+	}
+	catch(err){
+		res.status(400).json({error:err});
+	}
+})
+
+const updateMovie =  (async (req,res)=>{
+	try{
+		const movieID = req.query.movie;
+		const update = req.body;
+		const filter = {_id:movieID};
+		const movie = await Movie.findOneAndUpdate(filter,update);
+		if(movie){
+			res.status(200).json({message:'Update document success'})
+		}
+		else{
+			res.status(400).json({message: 'Error while updating document'})
+		}
+	}
+	catch(err){
+		res.status(400).json({error: err});
+	}
+})
+
 // Exporting the controller functions
 module.exports = { 
 	getMovie, 
 	postMovie,
 	getShowtimes, 
-	postShowtimes 
+	postShowtimes,
+	deleteMovie,
+	getUpdateInfo,
+	updateMovie,
 };

@@ -104,7 +104,7 @@
 
                         <% for (let i = 0; i < bookingHistory.length; i++) { %>
                             <tr>
-                                <td><%= moment(bookingHistory[i].bookedAt).format('DD-MM-YYYY') %></td>
+                                <td><%= moment(bookingHistory[i].bookedAt).format('DD-MM-YYYY HH:mm') %></td>
                                 <td><%= movies[i].title %></td>
                                 <td>Cinema <%= movies[i].showtimes[0].cinemaRoom %></td>
                                 <td><%= moment(movies[i].showtimes[0].time).format('DD/MM/YYYY HH:mm') %></td>

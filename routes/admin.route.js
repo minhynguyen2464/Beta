@@ -36,5 +36,11 @@ router.get('/admin/addShowtimes', movieController.getShowtimes);
 
 router.post('/admin/addShowtimes',movieController.postShowtimes)
 
+router.delete('/admin/deleteMovie',movieController.deleteMovie);
+
+router.get('/admin/getUpdateInfo',movieController.getUpdateInfo);
+
+router.put('/admin/updateMovie',movieController.updateMovie);
+
 // Exporting the router
 module.exports = router;

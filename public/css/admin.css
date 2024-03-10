@@ -68,3 +68,14 @@
 	background: #fff;
 	border-radius: 5px;
 }
+
+.edit-button{
+	display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+	border-radius: 40px;
+	height: 40px;
+	width: 40px;
+	color: white;
+}
