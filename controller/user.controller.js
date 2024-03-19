@@ -41,6 +41,8 @@ const postLogin = async (req, res) => {
 			if (user && (await bcrypt.compare(password, user.password))) {
 				// Setting the user ID in the session and sending a success response
 				req.session.userId = user._id;
+				req.session.role = user.role;
+				req.session.name = user.name;
 				res.status(200).json(user);
 			} else {
 				// Sending an error response if login fails
@@ -53,6 +55,16 @@ const postLogin = async (req, res) => {
 		}
 	}
 };
+
+const checkLoginContent = (req,res)=>{
+	if(req.session.userId!=null){
+		const data = req.session.name;
+		return data;
+	}
+	else{
+		return null;
+	}
+}
 
 // Controller function to render the registration page
 const getRegister = (req, res) => {
@@ -129,7 +141,7 @@ const logout = (req, res) => {
 	// Destroying the session and redirecting to the home page
 	req.session.destroy((err) => {
 		if (err) console.error(err);
-		res.redirect('/');
+		res.redirect('./login');
 	});
 };
 
@@ -152,6 +164,7 @@ const logout = (req, res) => {
 
 const getMovieDetail = async (req, res) => {
 	try {
+		const name = checkLoginContent(req,res);
 		const today = new Date();
 		// Extracting the movie ID from the query parameters
 		const id = req.query.movie; // Use req.query.movie for query parameters
@@ -186,7 +199,7 @@ const getMovieDetail = async (req, res) => {
 		movie.releaseYear = moment(movie.releaseYear).format();
 
 		// Rendering the movie detail page with the retrieved data
-		res.render('./users/movie-detail', { movie, moment, userID });
+		res.render('./users/movie-detail', { movie, moment, userID, userName: name });
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err.message });
@@ -200,7 +213,8 @@ const getMovie = async (req, res) => {
 		// Fetching all movies from the database
 		const movies = await Movie.find();
 		// Rendering the movie page with the retrieved movie data
-		res.render('./users/movie', { movies: movies });
+		const name = checkLoginContent(req,res);
+		res.render('./users/movie', { movies: movies,userName: name });
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err });
@@ -212,12 +226,20 @@ const getAccountEdit = async (req, res) => {
 	try {
 		// Extracting the user ID from the session
 		const userID = req.session.userId;
-		// Fetching provinces for city selection
-		const city = await area.getProvinces();
-		// Fetching user details based on the user ID
-		const user = await User.findById(userID);
-		// Rendering the edit page with user and city data
-		res.render('./users/edit', { user: user, city: city });
+		if(userID!=null){
+			// Fetching provinces for city selection
+			const city = await area.getProvinces();
+			// Fetching user details based on the user ID
+			const user = await User.findById(userID);
+			const name = checkLoginContent(req,res);
+			// Rendering the edit page with user and city data
+			res.render('./users/edit', { user: user, city: city, userName: name });
+		}
+		else{
+			res.render('./users/login');
+		}
+		
+		
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
 		res.status(500).json({ error: err });
@@ -335,7 +357,7 @@ const postSeatSelect = async(req,res)=>{
 const getAccountHistory = async (req, res) => {
     try {
         const userID = req.session.userId;
-
+		const name = checkLoginContent(req,res);
         if (userID) {
             // Use await to wait for the promise to resolve
             const bookingHistory = await Booking.find({ user: userID });
@@ -362,10 +384,10 @@ const getAccountHistory = async (req, res) => {
                 // Handle the case where no booking history is found
                 console.log("No booking history found for user:", userID);
                 // You might want to redirect or render a specific view for this case
-                return res.render('./users/history', { bookingHistory, movies, moment:moment });
+                return res.render('./users/history', { bookingHistory, movies, moment:moment, userName: name });
             }
 
-            res.render('./users/history', { bookingHistory, movies, moment:moment });
+            res.render('./users/history', { bookingHistory, movies, moment:moment, userName: name });
         } else {
             res.render('./users/login');
         }

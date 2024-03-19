@@ -17,18 +17,29 @@
 
 <body>
     <div style="width: 100%; background-color: black" class="text-white login-list">
-        <ul class="container login-content">
-            <li>
-                <i class="fa-solid fa-right-to-bracket"></i>
-                <a href="../login" style="color:white; text-decoration: none">Đăng nhập</a>
-            </li>
-
-            <li>
-                <i class="fa-solid fa-pencil"></i>
-                <a href="../register" style="color:white; text-decoration: none">Đăng ký</a>
-            </li>
-        </ul>
-
+        <% if (userName!=null) { %>
+            <ul class="container login-content">
+                <li>
+                    <p style="margin-bottom: 0px;">Xin chào! <%= userName %></p>
+                </li>
+                <li>
+                    <i class="fa-solid fa-door-open"></i>
+                    <a href="./logout" style="color:white; text-decoration: none">Đăng xuất</a>
+                </li>
+            </ul>
+        <% } else { %>
+            <ul class="container login-content">
+                <li>
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <a href="./login" style="color:white; text-decoration: none">Đăng nhập</a>
+                </li>
+    
+                <li>
+                    <i class="fa-solid fa-pencil"></i>
+                    <a href="./register" style="color:white; text-decoration: none">Đăng ký</a>
+                </li>
+            </ul>
+        <% } %>
     </div>
     <div class="container">
         <div class="row">

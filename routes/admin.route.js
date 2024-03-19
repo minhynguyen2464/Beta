@@ -18,9 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route to render the movie admin page
-router.get('/admin/movie', (req, res, next) => {
-	res.render('./admin/movie');
-});
+router.get('/admin/movie',movieController.getAdminPage);
 
 // Route to get all movies via API
 router.get('/admin/api/movie', movieController.getMovie);

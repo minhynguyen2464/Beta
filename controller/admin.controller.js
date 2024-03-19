@@ -1,13 +1,35 @@
 // Importing the Movie model
 const Movie = require('../models/movie.model');
 const moment = require('moment')
+
+const getAdminPage = async(req,res)=>{
+	try{
+		if(adminAuth(req,res)){
+			res.render('./admin/movie');
+		}
+		else{
+			res.render('./users/login');
+		}
+		
+	}
+	catch(err){
+		console.log(err);
+		res.status(500).json({error: "CANT GET ADMIN PAGE"});
+	}
+}
+
 // Controller function to get all movies
 const getMovie = async (req, res) => {
 	try {
-		// Fetching all movies from the database
-		const movies = await Movie.find({});
-		// Sending the movies as a JSON response with a 200 status code
-		res.status(200).json(movies);
+		if(adminAuth(req,res)){
+			// Fetching all movies from the database
+			const movies = await Movie.find({});
+			// Sending the movies as a JSON response with a 200 status code
+			res.status(200).json(movies);
+		}
+		else{
+			res.render('./user/login');
+		}
 	} catch (err) {
 		// Handling errors and sending a 500 status code with an error message
 		console.error(err);
@@ -56,14 +78,19 @@ const postMovie = async (req, res) => {
 
 const getShowtimes = async (req,res,next)=>{
 	try{
-		const movieID = req.query.movie;
-		const movie = await Movie.findById(movieID);
-		if (movie === null) {
-			movie.title = '';
-			movie.duration = '';
-			movie.director = '';
-		}		  
-		res.render('./admin/showtime',{movie: movie})
+		if(adminAuth(req,res)){
+			const movieID = req.query.movie;
+			const movie = await Movie.findById(movieID);
+			if (movie === null) {
+				movie.title = '';
+				movie.duration = '';
+				movie.director = '';
+			}		  
+			res.render('./admin/showtime',{movie: movie})
+		}
+		else{
+			res.render('./users/login');
+		}
 	}
 	catch(err){
 		res.status(400).json({error: 'Get showtimes failed. Please try again.'})
@@ -158,6 +185,15 @@ const updateMovie =  (async (req,res)=>{
 	}
 })
 
+const adminAuth = (req,res)=>{
+	if(req.session.role==='admin'){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 // Exporting the controller functions
 module.exports = { 
 	getMovie, 
@@ -167,4 +203,5 @@ module.exports = {
 	deleteMovie,
 	getUpdateInfo,
 	updateMovie,
+	getAdminPage,
 };

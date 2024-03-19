@@ -26,8 +26,8 @@ mongoose.connect(process.env.MONGODB_URI, {});
 
 // Setting up middleware
 app.use(logger('dev'));
-app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Parsing URL-encoded bodies
 app.use(express.json()); // Parsing JSON bodies
 app.use(
