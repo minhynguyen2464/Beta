@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Ticket Website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
@@ -20,34 +19,35 @@
         <% if (userName!=null) { %>
             <ul class="container login-content">
                 <li>
-                    <p style="margin-bottom: 0px;">Xin chào! <%= userName %></p>
+                    <p style="margin-bottom: 0px;">Xin chào!
+                        <%= userName %>
+                    </p>
                 </li>
                 <li>
                     <i class="fa-solid fa-door-open"></i>
                     <a href="./logout" style="color:white; text-decoration: none">Đăng xuất</a>
                 </li>
             </ul>
-        <% } else { %>
-            <ul class="container login-content">
-                <li>
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    <a href="./login" style="color:white; text-decoration: none">Đăng nhập</a>
-                </li>
-    
-                <li>
-                    <i class="fa-solid fa-pencil"></i>
-                    <a href="./register" style="color:white; text-decoration: none">Đăng ký</a>
-                </li>
-            </ul>
-        <% } %>
+            <% } else { %>
+                <ul class="container login-content">
+                    <li>
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <a href="./login" style="color:white; text-decoration: none">Đăng nhập</a>
+                    </li>
+
+                    <li>
+                        <i class="fa-solid fa-pencil"></i>
+                        <a href="./register" style="color:white; text-decoration: none">Đăng ký</a>
+                    </li>
+                </ul>
+                <% } %>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-xl-16">
                 <nav class="navbar navbar-expand-lg navbar-light bg-white">
                     <a class="navbar-brand" href="#">Beta Quang Trung</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -115,23 +115,19 @@
                                     <label>Gender:</label>
                                     <% if (user.gender==='male' ) { %>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="male"
-                                                value="male" checked>
+                                            <input class="form-check-input" type="radio" name="gender" id="male" value="male" checked>
                                             <label class="form-check-label" for="male">Male</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="gender" id="female"
-                                                value="female">
+                                            <input class="form-check-input" type="radio" name="gender" id="female" value="female">
                                             <label class="form-check-label" for="female">Female</label>
                                         </div>
                                         <% } %>
                                             <% if (user.gender==='female' ) { %>
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="gender" id="male"
-                                                        value="male">
+                                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
                                                     <label class="form-check-label" for="male">Male</label>
-                                                    <input class="form-check-input" type="radio" name="gender"
-                                                        id="female" value="female" checked>
+                                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female" checked>
                                                     <label class="form-check-label" for="female">Female</label>
                                                 </div>
                                                 <% } %>
@@ -141,20 +137,18 @@
                                     <label for="dob">Date of Birth:</label>
                                     <% const dobDate=new Date(user.dob); %>
                                         <% const formattedDate=dobDate.toISOString().split('T')[0]; %>
-                                            <input type="date" class="form-control" id="dob"
-                                                value="<%= formattedDate %>" disabled>
+                                            <input type="date" class="form-control" id="dob" value="<%= formattedDate %>" disabled>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="email">Email:</label>
-                                    <input type="email" class="form-control" id="email" value="<%=user.email%>"
-                                        disabled>
+                                    <input type="email" class="form-control" id="email" value="<%=user.email%>" disabled>
                                 </div>
 
                             </div>
 
                             <!-- Right Side of the Form -->
-                            <div class="col-md-6">  
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="city">City:</label>
                                     <select class="form-control" id="city" placeholder="Select your city">
@@ -177,7 +171,7 @@
                                                 </option>
                                             <% } %>
                                         <% } %>
-                                    </select>                                    
+                                    </select>
                                 </div>
 
                                 <div class="form-group">
@@ -187,8 +181,7 @@
 
                                 <div class="form-group">
                                     <label for="oldPassword">Old Password:</label>
-                                    <input type="password" class="form-control" id="oldPassword"
-                                        placeholder="Enter your old password">
+                                    <input type="password" class="form-control" id="oldPassword" placeholder="Enter your old password">
                                 </div>
 
                             </div>
@@ -222,12 +215,12 @@
     <script>
         // Get the form element by its ID
         const form = document.getElementById('form-account');
-    
+
         // Add an event listener to the form for the 'submit' event
         form.addEventListener('submit', (e) => {
             // Prevent the default form submission behavior
             e.preventDefault();
-    
+
             // Extract form data from input fields
             const formData = {
                 name: document.getElementById('name').value,
@@ -235,7 +228,7 @@
                 city: document.getElementById('city').value,
                 address: document.getElementById('address').value,
             }
-    
+
             // Make a PUT request to the '/account/edit' endpoint using Axios
             axios.put('/account/edit', formData)
                 .then((res) => {
@@ -249,7 +242,7 @@
                 });
         });
     </script>
-    
+
 </body>
 
 </html>

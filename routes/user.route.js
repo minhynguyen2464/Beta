@@ -3,17 +3,21 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controller/user.controller');
 
-// Route to render the login page
-router.get('/login', userController.getLogin);
+router.route('/login')
+    .get(userController.getLogin)
+    .post(userController.postLogin);
 
-// Route to handle login form submission
-router.post('/login', userController.postLogin);
+router.route('/register')
+    .get(userController.getRegister)
+    .post(userController.postRegister);
 
-// Route to render the registration page
-router.get('/register', userController.getRegister);
+router.route('/account/edit')
+    .get(userController.getAccountEdit)
+    .put(userController.putAccountEdit);
 
-// Route to handle registration form submission
-router.post('/register', userController.postRegister);
+router.route('/movie/seat')
+    .get(userController.getSeatSelect)
+    .post(userController.postSeatSelect);
 
 // Route to handle user logout
 router.get('/logout', userController.logout);
@@ -24,22 +28,11 @@ router.get('/detail', userController.getMovieDetail);
 // Route to handle fetching and rendering the movie page
 router.get('/movie', userController.getMovie);
 
-// Route to handle fetching and rendering the account edit page
-router.get('/account/edit', userController.getAccountEdit);
-
-// Route to handle updating user account information
-router.put('/account/edit', userController.putAccountEdit);
-
-router.get('/account/history',userController.getAccountHistory);
-
-
-router.get('/movie/seat', userController.getSeatSelect);
-
-router.post('/movie/seat',userController.postSeatSelect);
+router.get('/account/history', userController.getAccountHistory);
 
 // Default route to render the index page
 router.get('/', (req, res) => {
-	res.render('index');
+    res.render('index');
 });
 
 

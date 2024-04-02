@@ -1,81 +1,83 @@
 .counter_section {
-	min-height: auto;
-	display: block;
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-	border: 0px solid #e7e7e7;
-	padding: 30px 35px;
-	background: #fff;
-	border-radius: 5px;
-	min-height: 125px;
-	display: flex;
+    min-height: auto;
+    display: block;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 0px solid #e7e7e7;
+    padding: 30px 35px;
+    background: #fff;
+    border-radius: 5px;
+    min-height: 125px;
+    display: flex;
 }
 
 .couter_icon {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 0;
-	float: left;
-	margin: 8px 0 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    float: left;
+    margin: 8px 0 8px;
 }
+
 .couter-icon i {
-	font-size: 50px;
-	line-height: normal;
-	width: 100%;
-	float: left;
-	text-align: center;
+    font-size: 50px;
+    line-height: normal;
+    width: 100%;
+    float: left;
+    text-align: center;
 }
 
 .counter_no {
-	padding: 0 12px;
-	align-content: center;
-	align-items: center;
-	float: right;
-	width: 100%;
+    padding: 0 12px;
+    align-content: center;
+    align-items: center;
+    float: right;
+    width: 100%;
 }
-.couter_icon > div {
-	border-right: solid rgba(255, 255, 255, 0.3) 1px;
-	padding-right: 35px;
+
+.couter_icon>div {
+    border-right: solid rgba(255, 255, 255, 0.3) 1px;
+    padding-right: 35px;
 }
 
 .counter_no p.total_no {
-	margin: 0;
-	font-size: 45px;
-	float: left;
-	width: 100%;
-	line-height: normal;
-	font-weight: 600;
-	color: #455a64;
-	text-align: right;
-	font-size: 24px;
-	font-weight: 400;
+    margin: 0;
+    font-size: 45px;
+    float: left;
+    width: 100%;
+    line-height: normal;
+    font-weight: 600;
+    color: #455a64;
+    text-align: right;
+    font-size: 24px;
+    font-weight: 400;
 }
 
 .counter_no .head_couter {
-	float: left;
-	width: 100%;
-	color: #99abb4;
-	font-weight: 300;
-	margin: 0px 0 0 0;
-	font-size: 20px;
-	text-align: right;
+    float: left;
+    width: 100%;
+    color: #99abb4;
+    font-weight: 300;
+    margin: 0px 0 0 0;
+    font-size: 20px;
+    text-align: right;
 }
 
 .movie-form {
-	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-	border: 0px solid #e7e7e7;
-	padding: 30px 35px;
-	background: #fff;
-	border-radius: 5px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 0px solid #e7e7e7;
+    padding: 30px 35px;
+    background: #fff;
+    border-radius: 5px;
 }
 
-.edit-button{
-	display: flex;
+.edit-button {
+    display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-	border-radius: 40px;
-	height: 40px;
-	width: 40px;
-	color: white;
+    border-radius: 40px;
+    height: 40px;
+    width: 40px;
+    color: white;
 }

@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Ticket Website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
@@ -20,34 +19,35 @@
         <% if (userName!=null) { %>
             <ul class="container login-content">
                 <li>
-                    <p style="margin-bottom: 0px;">Xin chào! <%= userName %></p>
+                    <p style="margin-bottom: 0px;">Xin chào!
+                        <%= userName %>
+                    </p>
                 </li>
                 <li>
                     <i class="fa-solid fa-door-open"></i>
                     <a href="./logout" style="color:white; text-decoration: none">Đăng xuất</a>
                 </li>
             </ul>
-        <% } else { %>
-            <ul class="container login-content">
-                <li>
-                    <i class="fa-solid fa-right-to-bracket"></i>
-                    <a href="./login" style="color:white; text-decoration: none">Đăng nhập</a>
-                </li>
-    
-                <li>
-                    <i class="fa-solid fa-pencil"></i>
-                    <a href="./register" style="color:white; text-decoration: none">Đăng ký</a>
-                </li>
-            </ul>
-        <% } %>
+            <% } else { %>
+                <ul class="container login-content">
+                    <li>
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <a href="./login" style="color:white; text-decoration: none">Đăng nhập</a>
+                    </li>
+
+                    <li>
+                        <i class="fa-solid fa-pencil"></i>
+                        <a href="./register" style="color:white; text-decoration: none">Đăng ký</a>
+                    </li>
+                </ul>
+                <% } %>
     </div>
     <div class="container">
         <div class="row">
             <div class="col-xl-16">
                 <nav class="navbar navbar-expand-lg navbar-light bg-white">
                     <a class="navbar-brand" href="#">Beta Quang Trung</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -89,8 +89,7 @@
             <div class="row">
                 <!-- Left side with movie poster -->
                 <div class="col-md-4">
-                    <img src="/images/<%= movie.poster %>" alt="Movie Poster" class="img-fluid"
-                        style="max-width: 80%; border-radius: 20px;">
+                    <img src="/images/<%= movie.poster %>" alt="Movie Poster" class="img-fluid" style="max-width: 80%; border-radius: 20px;">
                 </div>
                 <!-- Right side with movie details -->
                 <div class="col-md-8">
@@ -104,11 +103,18 @@
                         <%= movie.director %>
                     </p>
                     <p><strong>DIỄN VIÊN:</strong>
-                        <%= movie.cast.join(', ') %></p>
-                        <p><strong>THỂ LOẠI:</strong> <%= movie.genre.join(' , ') %></p>
-                        <p><strong>THỜI LƯỢNG: </strong><%= movie.duration %> phút</p>
-                        <p><strong>NGÔN NGỮ: </strong><%= movie.language %></p>
-                        <p><strong>NGÀY KHỞI CHIẾU: </strong><%= moment(movie.releaseYear).format('DD/MM/YYYY') %>
+                        <%= movie.cast.join(', ') %>
+                    </p>
+                    <p><strong>THỂ LOẠI:</strong>
+                        <%= movie.genre.join(' , ') %>
+                    </p>
+                    <p><strong>THỜI LƯỢNG: </strong>
+                        <%= movie.duration %> phút</p>
+                    <p><strong>NGÔN NGỮ: </strong>
+                        <%= movie.language %>
+                    </p>
+                    <p><strong>NGÀY KHỞI CHIẾU: </strong>
+                        <%= moment(movie.releaseYear).format('DD/MM/YYYY') %>
                     </p>
 
 
@@ -129,11 +135,12 @@
                                 <a href="/movie/seat?movie=<%= movie._id %>&showtime=<%= movie.showtimes[i]._id %>&user=<%= userID %>" class="btn btn-light" style="width: 100%; background-color:#D3D3D3">
                                     <%= moment(movie.showtimes[i].time).format('HH:mm') %>
                                 </a>
-                                <div style="font-size: smaller;"><%= movie.showtimes[i].seatsAvailable %> ghế trống</div>
+                                <div style="font-size: smaller;">
+                                    <%= movie.showtimes[i].seatsAvailable %> ghế trống</div>
                             </div>
-                        <% } %>
-                        
-                        
+                            <% } %>
+
+
                 </div>
             </div>
             <!-- Footer -->
@@ -152,12 +159,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             var dateInfo = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
             var ul = document.getElementById('dateInfo');
             var noShowtimeParagraph;
             var defaultDayIndex = 0; // Set the index of the default day
-    
+
             for (var i = 0; i < 7; i++) {
                 var currentDate = new Date();
                 currentDate.setDate(currentDate.getDate() + i);
@@ -172,17 +179,17 @@
                 a.textContent = dateString;
                 li.appendChild(a);
                 ul.appendChild(li);
-    
-                a.addEventListener("click", function (event) {
+
+                a.addEventListener("click", function(event) {
                     event.preventDefault(); // prevent the default behavior of the anchor tag
                     var clickedDate = event.currentTarget.name.toString();
-    
+
                     // Select all div elements with id attribute
                     var allDivs = document.querySelectorAll(`div[id]`);
-    
+
                     // Check if there are div elements with the specified ID
                     var divExists = false;
-                    allDivs.forEach(function (div) {
+                    allDivs.forEach(function(div) {
                         if (div.id === clickedDate) {
                             div.style.display = 'block';
                             divExists = true;
@@ -190,7 +197,7 @@
                             div.style.display = 'none';
                         }
                     });
-                    
+
                     // If no div element exists and no paragraph has been created, create and append a paragraph element
                     if (!divExists && !noShowtimeParagraph) {
                         noShowtimeParagraph = document.createElement('p');
@@ -202,7 +209,7 @@
                         noShowtimeParagraph = null;
                     }
                 });
-    
+
                 // Set the default day
                 if (i === defaultDayIndex) {
                     var defaultDayDiv = document.getElementById(`movieDate${i}`);
@@ -213,9 +220,9 @@
             }
         });
     </script>
-    
-    
-    
+
+
+
 </body>
 
 </html>
