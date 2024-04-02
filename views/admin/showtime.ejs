@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showtime Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        
+        .btn a {
+            color: white;
+            font-style: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Add New Showtimes</h2>
+        <form id="showtimeForm">
+            <div class="form-group">
+                <label for="movieTitle">Tên phim:</label>
+                <input type="text" class="form-control" id="movieTitle" required value="<%= movie.title %>" disabled>
+            </div>
+            <div class="form-group">
+                <label for="duration">Thời lượng:</label>
+                <input type="text" class="form-control" id="duration" required value="<%= movie.duration %>" disabled>
+            </div>
+            <div class="form-group">
+                <label for="director">Đạo diễn:</label>
+                <input type="text" class="form-control" id="director" value="<%= movie.director %>" disabled>
+            </div>
+            <div class="form-group">
+                <label for="showtime">Showtime:</label>
+                <input type="datetime-local" class="form-control" id="showtimeInput">
+            </div>
+            <div class="form-group">
+                <label for="seatAvailable">Seats Available:</label>
+                <input type="number" class="form-control" id="seatAvailable" placeholder="Enter seats available">
+            </div>
+            <div class="form-group">
+                <label for="cinemaRoom">Cinema Room:</label>
+                <input type="text" class="form-control" id="cinemaRoom" placeholder="Enter cinema room">
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Showtime</th>
+                        <th>Seats Available</th>
+                        <th>Cinema Room</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="showtimesTableBody">
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-primary" onclick="addShowtimeRow()">Add Showtime</button>
+            <button type="button" id="buttonClick" class="btn btn-success">Submit</button>
+            <hr>
+            <h1>DANH SÁCH LỊCH CHIẾU</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Showtime</th>
+                        <th>Seats Available</th>
+                        <th>Cinema Room</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="showtimesList">
+                    <% for( let index = 0; index < showtimes.length; index++ ) { %>
+                        <tr>
+                            <td>
+                                <%= index+1 %>
+                            </td>
+                            <td>
+                                <%= moment(showtimes[index].time).format('DD-MM-YY HH:mm') %>
+                            </td>
+                            <td>
+                                <%= showtimes[index].seatsAvailable %>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-success">
+                                Cinema <%= showtimes[index].cinemaRoom %>
+                              </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger" id="deleteShowtimes" onclick="deleteShowTime('<%= showtimes[index]._id %>')">Xóa</button>
+
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <script>
+        const button = document.getElementById('buttonClick');
+        button.addEventListener('click', async(e) => {
+            e.preventDefault;
+
+            // Retrieve other form values
+            const movieTitle = document.getElementById('movieTitle').value;
+            const duration = document.getElementById('duration').value;
+            const director = document.getElementById('director').value;
+            // Retrieve showtimes from the table
+            const showtimesTableBody = document.getElementById('showtimesTableBody');
+            const showtimeRows = showtimesTableBody.getElementsByTagName('tr');
+            const showtimes = [];
+
+            // Loop through each row and retrieve showtime values
+            for (let i = 0; i < showtimeRows.length; i++) {
+                const cells = showtimeRows[i].getElementsByTagName('td');
+                const showtimeValue = cells[0].innerHTML;
+                const seatAvailableValue = cells[1].innerHTML;
+                const cinemaRoomValue = cells[2].innerHTML;
+
+                const showtimeObject = {
+                    movieTitle: movieTitle,
+                    showtime: showtimeValue,
+                    seatAvailable: seatAvailableValue,
+                    cinemaRoom: cinemaRoomValue,
+                };
+
+                showtimes.push(showtimeObject);
+            }
+
+
+            // Make a POST request to the '/login' endpoint using Axios
+            axios.post('/admin/addShowtimes', showtimes)
+                .then((res) => {
+                    // Log response data to the console and display a success message
+                    console.log("Movie ID:", movieTitle);
+                    console.log("Duration:", duration);
+                    console.log("Director:", director);
+                    console.log("Showtimes:", showtimes);
+                    alert("Thêm suất chiếu thành công");
+                    // Reload the page after successful registration
+                    //window.location.reload(true);
+                })
+                .catch((err) => {
+                    // Log any errors to the console
+                    console.error('Error:', err);
+                });
+        })
+
+        function addShowtimeRow() {
+            const showtimesTableBody = document.getElementById('showtimesTableBody');
+
+            // Create a new row
+            const newRow = showtimesTableBody.insertRow();
+
+            // Create cells for showtime, seats available, cinema room, and action
+            const showtimeCell = newRow.insertCell(0);
+            const seatsAvailableCell = newRow.insertCell(1);
+            const cinemaRoomCell = newRow.insertCell(2);
+            const actionCell = newRow.insertCell(3);
+
+            // Get the values from the inputs
+            const showtimeInput = document.getElementById('showtimeInput');
+            const seatAvailableInput = document.getElementById('seatAvailable');
+            const cinemaRoomInput = document.getElementById('cinemaRoom');
+
+            const showtimeValue = showtimeInput.value;
+            const seatAvailableValue = seatAvailableInput.value;
+            const cinemaRoomValue = cinemaRoomInput.value;
+
+            // Set the values to the cells
+            showtimeCell.innerHTML = showtimeValue;
+            seatsAvailableCell.innerHTML = seatAvailableValue;
+            cinemaRoomCell.innerHTML = cinemaRoomValue;
+
+            // Add a delete button to the action cell
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = 'Delete';
+            deleteButton.className = 'btn btn-danger';
+            deleteButton.onclick = function() {
+                showtimesTableBody.deleteRow(newRow.rowIndex);
+            };
+
+            // Append the delete button to the action cell
+            actionCell.appendChild(deleteButton);
+        }
+
+        function deleteShowTime(showtimeID) {
+            const movieID = '<%= movie._id %>'
+            axios.delete('/admin/deleteShowtimes?showtimeID=' + showtimeID + '&movieID=' + movieID)
+                .then((res) => {
+                    location.reload();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+    </script>
+
+</body>
+
+</html>
