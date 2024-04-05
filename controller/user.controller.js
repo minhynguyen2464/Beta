@@ -5,6 +5,7 @@ const area = require('area-vn');
 const User = require('../models/user.model');
 const Movie = require('../models/movie.model');
 const Booking = require('../models/booking.model')
+const Cinema = require('../models/cinema.model')
 
 // Controller function to render the login page
 const getLogin = (req, res) => {
@@ -42,9 +43,6 @@ const postLogin = async(req, res) => {
                 req.session.userId = user._id;
                 req.session.role = user.role;
                 req.session.name = user.name;
-                if (req.session.role === 'admin') {
-                    //res.render('./admin/movie');
-                }
                 res.status(200).json(user);
             } else {
                 // Sending an error response if login fails
@@ -64,6 +62,19 @@ const checkLoginContent = (req, res) => {
         return data;
     } else {
         return null;
+    }
+}
+
+const getIndex = async(req, res) => {
+    try {
+        // Fetching all movies from the database
+        const movies = await Movie.find();
+        // Rendering the movie page with the retrieved movie data
+        const name = checkLoginContent(req, res);
+        res.render('./users/index', { movies: movies, userName: name });
+    } catch (err) {
+        // Handling errors and sending a 500 status code with an error message
+        res.status(500).json({ error: err });
     }
 }
 
@@ -182,21 +193,38 @@ const getMovieDetail = async(req, res) => {
             releaseYear: 1,
             description: 1,
             poster: 1,
+            // showtimes: {
+            //     $elemMatch: {
+            //         'time': { $gt: today }
+            //     }
+            // }
             showtimes: {
-                $elemMatch: {
-                    'time': { $gt: today }
+                $filter: {
+                    input: '$showtimes',
+                    as: 'showtime',
+                    cond: { $gt: ['$$showtime.time', today] }
                 }
             }
         });
+        // Map over each showtime to flatten and extract the seatsBooked length
+        const seats = movie.showtimes.map(showtime => {
+            const flattenedSeatsBooked = showtime.seatsBooked.flat(); // Flatten the nested array
+            showtime.seatsTaken = flattenedSeatsBooked.length;
+            return flattenedSeatsBooked.length; // Return the length of the flattened array
+        });
+
         // Checking if the movie is not found
         if (!movie) {
             return res.status(404).json({ error: 'Movie not found or no upcoming showtimes.' });
         }
-
         // Formatting the releaseYear using the moment library
         movie.releaseYear = moment(movie.releaseYear).format();
-
         // Rendering the movie detail page with the retrieved data
+        // movie.showtimes.push({
+        //     seatsTaken: seats,
+        // })
+
+        console.log(movie);
         res.render('./users/movie-detail', { movie, moment, userID, userName: name });
     } catch (err) {
         // Handling errors and sending a 500 status code with an error message
@@ -267,16 +295,23 @@ const getSeatSelect = async(req, res) => {
         const showtimeID = req.query.showtime; // Get the 'showtime' parameter
         const movieShowtime = await Movie.findOne({
             _id: movieID,
-            //"showtimes._id": showtimeID
         }, {
             title: 1,
             poster: 1,
+            duration: 1,
             showtimes: {
                 $elemMatch: { _id: showtimeID }
             }
         });
-        res.render('./users/seat', { movieShowtime: movieShowtime, moment: moment });
+        const seatsTaken = movieShowtime.showtimes[0].seatsBooked.flat().length;
+        const cinemaName = movieShowtime.showtimes[0].cinemaRoom
+        const query = {
+            name: cinemaName
+        }
+        const cinema = await Cinema.findOne(query)
+        res.render('./users/seat', { movieShowtime: movieShowtime, moment: moment, cinema: cinema.structure, seatsTaken: seatsTaken });
     } catch (err) {
+        console.log(err);
         res.status(400).json({ error: err });
     }
 }
@@ -318,13 +353,14 @@ const getAccountHistory = async(req, res) => {
         const name = checkLoginContent(req, res);
         if (userID) {
             // Use await to wait for the promise to resolve
-            const bookingHistory = await Booking.find({ user: userID });
+            const bookingHistory = await Booking.find({ user: userID })
             let moviePromises = [];
 
             // Loop through each booking to retrieve movie information
             for (const booking of bookingHistory) {
                 const moviePromise = Movie.findById({ _id: booking.movie }, {
                     title: 1,
+                    duration: 1,
                     showtimes: {
                         $elemMatch: { _id: booking.showtimes }
                     }
@@ -334,14 +370,14 @@ const getAccountHistory = async(req, res) => {
 
             // Wait for all movie promises to resolve
             const movies = await Promise.all(moviePromises);
-            // Check if bookingHistory is an empty array
+            // // Check if bookingHistory is an empty array
             if (bookingHistory.length === 0) {
                 // Handle the case where no booking history is found
                 console.log("No booking history found for user:", userID);
                 // You might want to redirect or render a specific view for this case
                 return res.render('./users/history', { bookingHistory, movies, moment: moment, userName: name });
             }
-
+            console.log(bookingHistory);
             res.render('./users/history', { bookingHistory, movies, moment: moment, userName: name });
         } else {
             res.render('./users/login');
@@ -367,4 +403,5 @@ module.exports = {
     getSeatSelect,
     postSeatSelect,
     getAccountHistory,
+    getIndex,
 };

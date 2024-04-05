@@ -40,19 +40,18 @@
                 <input type="datetime-local" class="form-control" id="showtimeInput">
             </div>
             <div class="form-group">
-                <label for="seatAvailable">Seats Available:</label>
-                <input type="number" class="form-control" id="seatAvailable" placeholder="Enter seats available">
-            </div>
-            <div class="form-group">
-                <label for="cinemaRoom">Cinema Room:</label>
-                <input type="text" class="form-control" id="cinemaRoom" placeholder="Enter cinema room">
+                <label for="cinemaRoom">Cinema Room</label>
+                <select class="form-control" name="cinemaRoom" id="cinemaRoom">
+                <% for( let index = 0; index < cinema.length; index++ ) { %>
+                    <option value="<%= cinema[index].name %>"><%= cinema[index].name %></option>
+                <% } %>
+              </select>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
                         <th>Showtime</th>
-                        <th>Seats Available</th>
                         <th>Cinema Room</th>
                         <th>Action</th>
                     </tr>
@@ -86,11 +85,11 @@
                                 <%= moment(showtimes[index].time).format('DD-MM-YY HH:mm') %>
                             </td>
                             <td>
-                                <%= showtimes[index].seatsAvailable %>
+                                <%= showtimes[index].seatsAvailable - seats[index] %>
                             </td>
                             <td>
                                 <button type="button" class="btn btn-success">
-                                Cinema <%= showtimes[index].cinemaRoom %>
+                                <%= showtimes[index].cinemaRoom %>
                               </button>
                             </td>
                             <td>
@@ -128,13 +127,11 @@
             for (let i = 0; i < showtimeRows.length; i++) {
                 const cells = showtimeRows[i].getElementsByTagName('td');
                 const showtimeValue = cells[0].innerHTML;
-                const seatAvailableValue = cells[1].innerHTML;
-                const cinemaRoomValue = cells[2].innerHTML;
+                const cinemaRoomValue = cells[1].innerHTML;
 
                 const showtimeObject = {
                     movieTitle: movieTitle,
                     showtime: showtimeValue,
-                    seatAvailable: seatAvailableValue,
                     cinemaRoom: cinemaRoomValue,
                 };
 
@@ -168,22 +165,18 @@
 
             // Create cells for showtime, seats available, cinema room, and action
             const showtimeCell = newRow.insertCell(0);
-            const seatsAvailableCell = newRow.insertCell(1);
-            const cinemaRoomCell = newRow.insertCell(2);
-            const actionCell = newRow.insertCell(3);
+            const cinemaRoomCell = newRow.insertCell(1);
+            const actionCell = newRow.insertCell(2);
 
             // Get the values from the inputs
             const showtimeInput = document.getElementById('showtimeInput');
-            const seatAvailableInput = document.getElementById('seatAvailable');
             const cinemaRoomInput = document.getElementById('cinemaRoom');
 
             const showtimeValue = showtimeInput.value;
-            const seatAvailableValue = seatAvailableInput.value;
             const cinemaRoomValue = cinemaRoomInput.value;
 
             // Set the values to the cells
             showtimeCell.innerHTML = showtimeValue;
-            seatsAvailableCell.innerHTML = seatAvailableValue;
             cinemaRoomCell.innerHTML = cinemaRoomValue;
 
             // Add a delete button to the action cell

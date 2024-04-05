@@ -46,7 +46,7 @@
         <div class="row">
             <div class="col-xl-16">
                 <nav class="navbar navbar-expand-lg navbar-light bg-white">
-                    <a class="navbar-brand" href="#">Beta Quang Trung</a>
+                    <a class="navbar-brand" href="../">Beta Quang Trung</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -108,6 +108,7 @@
                             <th>Phòng chiếu</th>
                             <th>Suất Chiếu</th>
                             <th>Giá Tiền</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,7 +122,7 @@
                                 <td>
                                     <%= movies[i].title %>
                                 </td>
-                                <td>Cinema
+                                <td>
                                     <%= movies[i].showtimes[0].cinemaRoom %>
                                 </td>
                                 <td>
@@ -129,6 +130,82 @@
                                 </td>
                                 <td>
                                     <%= bookingHistory[i].price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
+                                </td>
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modelId<%= i %>">
+                                  Xem
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modelId<%= i %>" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content" style="background-image: url(https://t4.ftcdn.net/jpg/05/26/87/65/360_F_526876565_fky3NCpXZO9Uo32Qs1rM0vHxoginVUFv.jpg); ">
+                                                <div class="modal-header justify-content-center">
+                                                    <h5 class="modal-title">THE VAO PHONG CHIEU PHIM</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h4>Beta Quang Trung</h4>
+                                                    <p>33A duong 30/4 thanh pho Vung Tau</p>
+                                                    <p>
+                                                        <%= moment(bookingHistory[i].bookedAt).format('DD/MMM/YYYY HH:mm') %>
+                                                    </p>
+                                                    <p>===================================================</p>
+                                                    <h3>2DDUB
+                                                        <%= movies[i].title %>
+                                                    </h3>
+                                                    <div class="row">
+                                                        <div class="col-xl-6">
+                                                            <%= moment(movies[i].showtimes[0].time).format('DD/MMM/YYYY') %>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <%= moment(movies[i].showtimes[0].time).format('HH:mm') %>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <h3>
+                                                                <%= movies[i].showtimes[0].cinemaRoom %>
+                                                            </h3>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <h3>
+                                                                <%= bookingHistory[i].seats %>
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                    <p>===================================================</p>
+                                                    <div class="row">
+                                                        <div class="col-xl-6">
+                                                            <h5>
+                                                                <%= bookingHistory[i].seatsType %> ticket
+                                                            </h5>
+                                                            <p>-Ticket price</p>
+                                                        </div>
+                                                        <div class="col-xl-6">
+                                                            <h5>
+                                                                VND:
+                                                                <% 
+                                                                const number = bookingHistory[i].price;
+                                                                const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                                                                 %>
+                                                                    <%= formattedNumber %>
+                                                            </h5>
+                                                            <p>65.000 (bao gom 5% VAT)</p>
+                                                        </div>
+                                                    </div>
+                                                    <p>===================================================</p>
+                                                    <p style="margin-left:25%;">
+                                                        Mã vé:
+                                                        <%= bookingHistory[i]._id %>
+                                                    </p>
+
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <% } %>

@@ -2,6 +2,7 @@
 const Movie = require('../models/movie.model');
 const moment = require('moment')
 const mongoose = require('mongoose');
+const Cinema = require('../models/cinema.model');
 
 const getAdminPage = async(req, res) => {
     try {
@@ -79,35 +80,47 @@ const getShowtimes = async(req, res, next) => {
         if (adminAuth(req, res)) {
             const movieID = req.query.movie;
             const movie = await Movie.findById(movieID);
+            const cinema = await Cinema.find({});
             const showtimes = movie.showtimes
             if (movie === null) {
                 movie.title = '';
                 movie.duration = '';
                 movie.director = '';
             }
-            res.render('./admin/showtime', { movie: movie, showtimes: showtimes, moment: moment })
+            // Map over each showtime to flatten and extract the seatsBooked length
+            const seats = showtimes.map(showtime => {
+                const flattenedSeatsBooked = showtime.seatsBooked.flat(); // Flatten the nested array
+                return flattenedSeatsBooked.length; // Return the length of the flattened array
+            });
+
+            res.render('./admin/showtime', { movie: movie, showtimes: showtimes, moment: moment, seats: seats, cinema })
         } else {
             res.render('./users/login');
         }
     } catch (err) {
-        res.status(400).json({ error: 'Get showtimes failed. Please try again.' })
+        console.log(err);
+        res.status(400).json({ error: err })
     }
 }
 
 const postShowtimes = async(req, res, next) => {
     try {
         const data = req.body;
-        //console.log(data);
+        console.log(data);
         const showtimeData = [];
         for (let i = 0; i < data.length; i++) {
+            const query = {
+                name: data[i].cinemaRoom
+            }
+            const cinema = await Cinema.findOne(query);
             const showtimeObject = {
                 time: data[i].showtime,
-                seatsAvailable: data[i].seatAvailable,
+                seatsAvailable: cinema.seatsAvailable,
                 cinemaRoom: data[i].cinemaRoom,
             };
             showtimeData.push(showtimeObject);
         }
-        console.log(showtimeData); //Pass
+        //console.log(showtimeData); //Pass
 
         const title = data[0].movieTitle;
         //const newShowtime = new Showtime(showtimeData)
@@ -122,6 +135,7 @@ const postShowtimes = async(req, res, next) => {
             res.status(404).json({ error: 'Movie not found' });
         }
     } catch (err) {
+        console.log(err);
         res.status(400).json({ error: 'Post showtimes failed. Please try again.' })
     }
 }

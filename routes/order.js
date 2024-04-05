@@ -19,6 +19,10 @@ const Movie = require('../models/movie.model');
 router.get('/create_payment_url', function(req, res, next) {
     const amount = req.query.price;
     const bookingID = req.query.bookingID
+    console.log(bookingID);
+    if (bookingID === undefined) {
+        res.render('./users/login');
+    }
     res.render('./users/order', { title: 'Tạo mới đơn hàng', amount: amount, orderId: bookingID })
 });
 

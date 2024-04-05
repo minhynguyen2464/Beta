@@ -31,9 +31,7 @@ router.get('/movie', userController.getMovie);
 router.get('/account/history', userController.getAccountHistory);
 
 // Default route to render the index page
-router.get('/', (req, res) => {
-    res.render('index');
-});
+router.get('/', userController.getIndex);
 
 
 // Exporting the router
