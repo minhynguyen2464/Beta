@@ -3,6 +3,8 @@ const Movie = require('../models/movie.model');
 const moment = require('moment')
 const mongoose = require('mongoose');
 const Cinema = require('../models/cinema.model');
+const User = require('../models/user.model');
+const Booking = require('../models/booking.model');
 
 const getAdminPage = async(req, res) => {
     try {
@@ -227,6 +229,29 @@ const deleteShowtimes = async(req, res) => {
     }
 }
 
+const getIndex = async(req, res) => {
+    try {
+        const userCount = await User.countDocuments({ role: 'user' });
+        const ticketCount = await Booking.countDocuments({});
+        const revenueArray = await Booking.find({}, {
+                price: 1,
+                seats: 1,
+                status: 1,
+                transactionDate: 1,
+            }).sort({ transactionDate: -1 })
+            .populate('movie')
+            .populate('user')
+            // Summing up all the prices
+        const movies = await Movie.find({})
+        const totalPrice = revenueArray.reduce((acc, curr) => acc + curr.price, 0);
+        console.log(movies);
+        res.render('./admin/index', { userCount, ticketCount, totalPrice, bookings: revenueArray, movies });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: err });
+    }
+}
+
 // Exporting the controller functions
 module.exports = {
     getMovie,
@@ -238,4 +263,5 @@ module.exports = {
     updateMovie,
     getAdminPage,
     deleteShowtimes,
+    getIndex,
 };

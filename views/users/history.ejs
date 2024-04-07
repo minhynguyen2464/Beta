@@ -151,7 +151,7 @@
                                                         <%= moment(bookingHistory[i].bookedAt).format('DD/MMM/YYYY HH:mm') %>
                                                     </p>
                                                     <p>===================================================</p>
-                                                    <h3>2DDUB
+                                                    <h3>2DSUB
                                                         <%= movies[i].title %>
                                                     </h3>
                                                     <div class="row">
@@ -179,6 +179,7 @@
                                                                 <%= bookingHistory[i].seatsType %> ticket
                                                             </h5>
                                                             <p>-Ticket price</p>
+                                                            <p>-Status</p>
                                                         </div>
                                                         <div class="col-xl-6">
                                                             <h5>
@@ -190,8 +191,10 @@
                                                                     <%= formattedNumber %>
                                                             </h5>
                                                             <p>65.000 (bao gom 5% VAT)</p>
+                                                            <p><i class="fa-solid fa-check"></i> Da thanh toan</p>
                                                         </div>
                                                     </div>
+
                                                     <p>===================================================</p>
                                                     <p style="margin-left:25%;">
                                                         Mã vé:

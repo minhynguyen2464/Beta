@@ -237,7 +237,7 @@ const getMovieDetail = async(req, res) => {
 const getMovie = async(req, res) => {
     try {
         // Fetching all movies from the database
-        const movies = await Movie.find();
+        const movies = await Movie.find({ status: 1 });
         // Rendering the movie page with the retrieved movie data
         const name = checkLoginContent(req, res);
         res.render('./users/movie', { movies: movies, userName: name });
@@ -387,6 +387,18 @@ const getAccountHistory = async(req, res) => {
     }
 };
 
+const getUpcommingMovie = async(req, res) => {
+    try {
+        const status = req.query.status;
+        const movies = await Movie.find({ status: status });
+        res.status(200).json(movies);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: err });
+    }
+}
+
 
 
 // Exporting the controller functions
@@ -404,4 +416,5 @@ module.exports = {
     postSeatSelect,
     getAccountHistory,
     getIndex,
+    getUpcommingMovie,
 };

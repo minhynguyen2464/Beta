@@ -42,5 +42,7 @@ router.put('/admin/updateMovie', movieController.updateMovie);
 
 router.delete('/admin/deleteShowtimes', movieController.deleteShowtimes);
 
+router.get('/admin', movieController.getIndex)
+
 // Exporting the router
 module.exports = router;

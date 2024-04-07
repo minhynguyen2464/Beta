@@ -89,21 +89,17 @@
             <div class="row d-flex justify-content-center">
                 <div class="text-center">
                     <ul class="nav nav-tabs tab-films ">
-                        <li>
-                            <a href="">
-                                <h1>PHIM SẮP CHIẾU</h1>
-                            </a>
+                        <li class="upcomming" id="upcomming">
+                            <h1>PHIM SẮP CHIẾU</h1>
                         </li>
-                        <li class="active">
-                            <a href="">
-                                <h1>PHIM ĐANG CHIẾU</h1>
-                            </a>
+                        <li class="active nowShowing" id="nowShowing">
+                            <h1>PHIM ĐANG CHIẾU</h1>
                         </li>
 
                     </ul>
                 </div>
             </div>
-            <div class="row">
+            <div class="row movieContainer" id="movieContainer">
                 <% for( let index=0; index < movies.length; index++ ) { %>
                     <div class="col-md-3 film-item">
                         <img src="./images/<%= movies[index].poster %>" alt="Film 1 Poster" class="film-poster">
@@ -116,9 +112,10 @@
                         <p><strong>Thời lượng:</strong>
                             <%= movies[index].duration %> phút
                         </p>
-                        <button class="btn btn-primary btn-block buy-ticket-btn">
-                            <a href="/detail?movie=<%=  movies[index]._id%>" style="text-decoration:none;color:white;"><i class="fa-solid fa-cart-shopping"></i> Mua vé</a>
-                        </button>
+
+                        <a href="/detail?movie=<%=  movies[index]._id%>" class="btn btn-primary btn-block buy-ticket-btn " style="text-decoration:none;color:white;">
+                            <i class="fa-solid fa-cart-shopping"></i> Mua vé
+                        </a>
                     </div>
 
                     <% } %>
@@ -141,7 +138,65 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <script>
+        const upcommingTrigger = document.getElementById('upcomming');
+        const nowShowingTrigger = document.getElementById('nowShowing');
+        upcommingTrigger.addEventListener('click', (e) => {
+            nowShowingTrigger.classList.remove('active');
+            upcommingTrigger.classList.add('active');
+            const status = 2;
+            axios.get('/api/upcommingMovie?status=' + status)
+                .then((res) => {
+                    const movies = res.data;
+                    console.log(movies);
+                    renderMovies(movies);
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        })
+        nowShowingTrigger.addEventListener('click', (e) => {
+            upcommingTrigger.classList.remove('active');
+            nowShowingTrigger.classList.add('active');
+            const status = 1;
+            axios.get('/api/upcommingMovie?status=' + status)
+                .then((res) => {
+                    const movies = res.data;
+                    console.log(movies);
+                    renderMovies(movies);
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        })
+
+        function renderMovies(movies) {
+            const movieContainer = document.getElementById('movieContainer');
+            movieContainer.innerHTML = '';
+
+            movies.forEach(movie => {
+                const movieDiv = document.createElement('div');
+                movieDiv.classList.add('col-md-3', 'film-item');
+                const buttonText = movie.status === 2 ? 'Sắp chiếu' : 'Mua vé';
+
+                movieDiv.innerHTML = `
+                    <img src="./images/${movie.poster}" alt="Film 1 Poster" class="film-poster">
+                    <h5 class="mt-2 movie-title">${movie.title}</h5>
+                    <p><strong>Thể loại:</strong> ${movie.genre.join(', ')}</p>
+                    <p><strong>Thời lượng:</strong> ${movie.duration} phút</p>
+                    <a href="/detail?movie=${movie._id}" class="btn btn-primary btn-block buy-ticket-btn" style="text-decoration:none;color:white;">
+                        <i class="fa-solid fa-cart-shopping"></i> ${buttonText}
+                    </a>
+                `;
+
+                movieContainer.appendChild(movieDiv);
+            });
+        }
+    </script>
 </body>
 
 </html>
