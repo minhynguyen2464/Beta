@@ -49,71 +49,83 @@
                 <!-- Main content goes here -->
                 <h1 class="row justify-content-center">Movie Form</h1>
                 <div class="row justify-content-center">
-                    <form enctype="multipart/form-data" class="movie-form" id="movieForm">
-                        <!-- Movie Title -->
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
-                        </div>
+                    <div class="col-xl-8">
+                        <form enctype="multipart/form-data" class="movie-form" id="movieForm">
+                            <!-- Movie Title -->
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label for="title">Title:</label>
+                                        <input type="text" class="form-control" id="title" name="title" required placeholder="Trú Quỷ: Truyền Thuyết Ma Kéo Giò">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <!-- Director -->
+                                    <div class="form-group">
+                                        <label for="director">Director:</label>
+                                        <input type="text" class="form-control" id="director" name="director" required placeholder="Jiro Nagae">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <!-- Cast -->
+                                    <div class="form-group">
+                                        <label for="cast">Cast (comma-separated):</label>
+                                        <input type="text" class="form-control" id="cast" name="cast" required placeholder="Rikka Ihara, Taiyu Fujiwara, Shiori Akita">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <!-- Genre (comma-separated) -->
+                                    <div class="form-group">
+                                        <label for="genre">Genre (comma-separated):</label>
+                                        <input type="text" class="form-control" id="genre" name="genre" required placeholder="Kinh dị">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <!-- Duration (in minutes) -->
+                                    <div class="form-group">
+                                        <label for="duration">Duration (minutes):</label>
+                                        <input type="number" class="form-control" id="duration" name="duration" required placeholder="220">
+                                    </div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <!-- Language -->
+                                    <div class="form-group">
+                                        <label for="language">Language:</label>
+                                        <input type="text" class="form-control" id="language" name="language" required placeholder="Tiếng Nhật">
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- Director -->
-                        <div class="form-group">
-                            <label for="director">Director:</label>
-                            <input type="text" class="form-control" id="director" name="director" required>
-                        </div>
-
-                        <!-- Cast -->
-                        <div class="form-group">
-                            <label for="cast">Cast (comma-separated):</label>
-                            <input type="text" class="form-control" id="cast" name="cast" required>
-                        </div>
-
-                        <!-- Genre (comma-separated) -->
-                        <div class="form-group">
-                            <label for="genre">Genre (comma-separated):</label>
-                            <input type="text" class="form-control" id="genre" name="genre" required>
-                        </div>
-
-                        <!-- Duration (in minutes) -->
-                        <div class="form-group">
-                            <label for="duration">Duration (minutes):</label>
-                            <input type="number" class="form-control" id="duration" name="duration" required>
-                        </div>
-
-                        <!-- Language -->
-                        <div class="form-group">
-                            <label for="language">Language:</label>
-                            <input type="text" class="form-control" id="language" name="language" required>
-                        </div>
-
-                        <!-- Release Year -->
-                        <div class="form-group">
-                            <label for="releaseYear">Release Year:</label>
-                            <input type="date" class="form-control" id="releaseYear" name="releaseYear" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Movie Description:</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="status">Tình trạng</label>
-                            <select class="form-control" name="status" id="status">
-                            <option value="1">Đang chiếu</option>
-                            <option value="2">Sắp chiếu</option>
-                            <option value="3">Hết chiếu</option>
-                          </select>
-                        </div>
-                        <!-- Movie Poster -->
-                        <div class="form-group">
-                            <label for="poster">Movie Poster:</label>
-                            <input type="file" class="form-control-file" id="poster" name="poster" accept="image/*">
-                        </div>
+                            <!-- Release Year -->
+                            <div class="form-group">
+                                <label for="releaseYear">Release Year:</label>
+                                <input type="date" class="form-control" id="releaseYear" name="releaseYear" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Movie Description:</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Tình trạng</label>
+                                <select class="form-control" name="status" id="status">
+                                <option value="1">Đang chiếu</option>
+                                <option value="2">Sắp chiếu</option>
+                                <option value="3">Hết chiếu</option>
+                              </select>
+                            </div>
+                            <!-- Movie Poster -->
+                            <div class="form-group">
+                                <label for="poster">Movie Poster:</label>
+                                <input type="file" class="form-control-file" id="poster" name="poster" accept="image/*">
+                            </div>
 
 
-                        <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary">Thêm phim</button>
-                        <button type="button" id="update" class="btn btn-warning" style="float:right">Cập nhật</button>
-                    </form>
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Thêm phim</button>
+                            <button type="button" id="update" class="btn btn-warning" style="float:right">Cập nhật</button>
+                        </form>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col-md-12">

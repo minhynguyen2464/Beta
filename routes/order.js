@@ -11,6 +11,8 @@ const request = require('request');
 const moment = require('moment');
 const Booking = require('../models/booking.model');
 const Movie = require('../models/movie.model');
+var nodemailer = require('nodemailer');
+
 
 // router.get('/', function(req, res, next){
 //     res.render('orderlist', { title: 'Danh sách đơn hàng' })
@@ -96,6 +98,91 @@ router.post('/create_payment_url', function(req, res, next) {
     res.redirect(vnpUrl)
 });
 
+const sendMailToClient = async(orderID, showtime) => {
+    const booking = await Booking.findOne({ _id: orderID })
+        .populate('movie')
+        .populate('user');
+    console.log(booking);
+    const movie = booking.movie
+    const user = booking.user
+    const number = booking.price;
+    const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var transporter = await nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'minhynguyen97@gmail.com',
+            pass: 'mefc uopb gqhl kgdv'
+        }
+    });
+
+    var mailOptions = {
+        from: 'minhynguyen97@gmail.com',
+        to: `${user.email}`,
+        subject: 'Beta Cinemas: Giao Dich Thanh Cong',
+        html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; box-sizing: border-box;">
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">VÉ XEM PHIM</h2>
+        </div>
+    
+        <!-- Body -->
+        <div style="margin-bottom: 20px;">
+            <h1 style="color: #007bff;">Beta Quang Trung</h1>
+            <p>33A đường 30/4 thành phố Vũng Tàu</p>
+            <p>${moment(booking.bookedAt).format('DD/MMM/YYYY HH:mm')}</p>
+            <p>===================================================</p>
+            <h3 style="font-size: 24px;">2DSUB ${movie.title}</h3>
+            <div style="display: flex; flex-wrap: wrap; margin-bottom: 15px;">
+                <!-- Movie Time and Room Details -->
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    ${moment(showtime.time).format('DD/MMM/YYYY')}
+                </div>
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    ${moment(showtime.time).format('HH:mm')}
+                </div>
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    <h3>${showtime.cinemaRoom}</h3>
+                </div>
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    <h3>${booking.seats}</h3>
+                </div>
+            </div>
+            <p>===================================================</p>
+            <!-- Ticket Price and Status -->
+            <div style="display: flex; flex-wrap: wrap;">
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    <h3>${booking.seatsType} ticket</h3>
+                    <p>-Ticket price</p>
+                    <p>-Status</p>
+                </div>
+                <div style="flex: 50%; max-width: 50%; padding: 0 10px;">
+                    <h3>VND: ${formattedNumber}</h3>
+                    <p>65.000 (bao gom 5% VAT)</p>
+                    <p><i class="fa-solid fa-check" style="color: green;"></i> Da thanh toan</p>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Footer -->
+        <div style="text-align: center; color: #888; margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p>Thank you for choosing Beta Quang Trung Cinema!</p>
+            <p>For any questions or assistance, call us at 123-456-7890 or email support@example.com</p>
+            <p>&copy; ${new Date().getFullYear()} Beta Quang Trung Cinema. All rights reserved.</p>
+        </div>
+    </div>`
+    };
+
+
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+
+}
 
 router.get('/vnpay_return', function(req, res, next) {
     let vnp_Params = req.query;
@@ -142,6 +229,7 @@ router.get('/vnpay_return', function(req, res, next) {
                                     showtime.seatsBooked = showtime.seatsBooked.flat();
                                     movie.save() //Update seat cho showtime ở model Movie
                                         // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
+                                    sendMailToClient(orderId, showtime);
                                     res.render('./users/success', { code: vnp_Params['vnp_ResponseCode'] })
                                 })
                                 .catch((err) => {
