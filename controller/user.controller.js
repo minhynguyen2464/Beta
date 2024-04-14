@@ -25,36 +25,69 @@ const loginValidate = (email, password) => {
     return null;
 }
 
-// Controller function to handle the login form submission
+//Mongoose
+// // Controller function to handle the login form submission
+// const postLogin = async(req, res) => {
+//     // Extracting email and password from the request body
+//     const { email, password } = req.body;
+//     const validationError = loginValidate(email, password);
+//     if (validationError) {
+//         res.status(400).json({ error: validationError })
+//     } else {
+//         try {
+//             // Finding a user with the provided email in the database
+//             const user = await User.findOne({ email });
+
+//             // Checking if the user exists and the password is correct
+//             if (user && (await bcrypt.compare(password, user.password))) {
+//                 // Setting the user ID in the session and sending a success response
+//                 req.session.userId = user._id;
+//                 req.session.role = user.role;
+//                 req.session.name = user.name;
+//                 res.status(200).json(user);
+//             } else {
+//                 // Sending an error response if login fails
+//                 res.status(400).json({ error: 'Login failed. Please try again.' });
+//             }
+//         } catch (error) {
+//             // Handling errors and rendering the login page
+//             console.error(error);
+//             res.render('users/login');
+//         }
+//     }
+// };
+
 const postLogin = async(req, res) => {
     // Extracting email and password from the request body
     const { email, password } = req.body;
     const validationError = loginValidate(email, password);
     if (validationError) {
-        res.status(400).json({ error: validationError })
+        return res.status(400).json({ error: validationError });
     } else {
         try {
             // Finding a user with the provided email in the database
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ where: { email } });
 
             // Checking if the user exists and the password is correct
             if (user && (await bcrypt.compare(password, user.password))) {
-                // Setting the user ID in the session and sending a success response
-                req.session.userId = user._id;
+                //Setting the user ID in the session and sending a success response
+                req.session.userId = user.id;
                 req.session.role = user.role;
                 req.session.name = user.name;
+                // Sending a success response
                 res.status(200).json(user);
             } else {
                 // Sending an error response if login fails
                 res.status(400).json({ error: 'Login failed. Please try again.' });
             }
         } catch (error) {
-            // Handling errors and rendering the login page
+            // Handling errors and sending an error response
             console.error(error);
-            res.render('users/login');
+            res.status(500).json({ error: 'Internal server error' });
         }
     }
 };
+
 
 const checkLoginContent = (req, res) => {
     if (req.session.userId != null) {
@@ -109,43 +142,77 @@ function validateUserData(data) {
     return null;
 }
 
-// Controller function to handle the registration form submission
+//Mongoose
+// // Controller function to handle the registration form submission
+// const postRegister = async(req, res) => {
+//     try {
+//         // Extracting data from the request body
+//         const data = req.body;
+//         const validationError = validateUserData(data)
+//         if (validationError) {
+//             console.error(validationError);
+//             res.status(400).json({ error: validationError });
+//             //res.render('./users/register');
+//         } else {
+//             // Generating a salt and hashing the password
+//             const salt = await bcrypt.genSalt(10);
+//             const hashedPassword = await bcrypt.hash(data.password, salt);
+
+//             // Creating a new User instance with the hashed password
+//             const newUser = new User({
+//                 name: data.name,
+//                 email: data.email,
+//                 password: hashedPassword,
+//                 dob: data.dob,
+//                 gender: data.gender,
+//                 phoneNumber: data.phoneNumber,
+//             });
+
+//             // Saving the new user to the database and checking if it was successful
+//             if (await newUser.save()) {
+//                 console.log(newUser);
+//                 res.status(201).json(newUser);
+//             }
+//         }
+//     } catch (error) {
+//         // Handling errors and sending an error response
+//         console.error(error);
+//         res.status(400).json({ error: 'Registration failed. Please try again.' });
+//     }
+// };
+
 const postRegister = async(req, res) => {
     try {
-        // Extracting data from the request body
         const data = req.body;
-        const validationError = validateUserData(data)
+        const validationError = validateUserData(data);
         if (validationError) {
             console.error(validationError);
-            res.status(400).json({ error: validationError });
-            //res.render('./users/register');
-        } else {
-            // Generating a salt and hashing the password
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(data.password, salt);
-
-            // Creating a new User instance with the hashed password
-            const newUser = new User({
-                name: data.name,
-                email: data.email,
-                password: hashedPassword,
-                dob: data.dob,
-                gender: data.gender,
-                phoneNumber: data.phoneNumber,
-            });
-
-            // Saving the new user to the database and checking if it was successful
-            if (await newUser.save()) {
-                console.log(newUser);
-                res.status(201).json(newUser);
-            }
+            return res.status(400).json({ error: validationError });
         }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(data.password, salt);
+
+        const newUser = await User.create({
+            name: data.name,
+            email: data.email,
+            password: hashedPassword,
+            dob: data.dob,
+            gender: data.gender,
+            phoneNumber: data.phoneNumber,
+            city: data.city,
+            address: data.address,
+            role: data.role // Assuming you might also want to specify the role
+        });
+
+        console.log(newUser);
+        return res.status(201).json(newUser);
     } catch (error) {
-        // Handling errors and sending an error response
         console.error(error);
-        res.status(400).json({ error: 'Registration failed. Please try again.' });
+        return res.status(400).json({ error: 'Registration failed. Please try again.' });
     }
 };
+
 
 // Controller function to handle user logout
 const logout = (req, res) => {
@@ -247,6 +314,29 @@ const getMovie = async(req, res) => {
     }
 };
 
+//Mongoose
+// const getAccountEdit = async(req, res) => {
+//     try {
+//         // Extracting the user ID from the session
+//         const userID = req.session.userId;
+//         if (userID != null) {
+//             // Fetching provinces for city selection
+//             const city = await area.getProvinces();
+//             // Fetching user details based on the user ID
+//             const user = await User.findById(userID);
+//             const name = checkLoginContent(req, res);
+//             // Rendering the edit page with user and city data
+//             res.render('./users/edit', { user: user, city: city, userName: name });
+//         } else {
+//             res.render('./users/login');
+//         }
+
+
+//     } catch (err) {
+//         // Handling errors and sending a 500 status code with an error message
+//         res.status(500).json({ error: err });
+//     }
+// };
 
 const getAccountEdit = async(req, res) => {
     try {
@@ -254,23 +344,43 @@ const getAccountEdit = async(req, res) => {
         const userID = req.session.userId;
         if (userID != null) {
             // Fetching provinces for city selection
-            const city = await area.getProvinces();
+            const city = await area.getProvinces(); // Assuming area.getProvinces() is defined elsewhere
+
             // Fetching user details based on the user ID
-            const user = await User.findById(userID);
-            const name = checkLoginContent(req, res);
+            const user = await User.findByPk(userID); // Using findByPk to find by primary key
+
+            const name = checkLoginContent(req, res); // Assuming checkLoginContent() is defined elsewhere
+
             // Rendering the edit page with user and city data
             res.render('./users/edit', { user: user, city: city, userName: name });
         } else {
             res.render('./users/login');
         }
-
-
     } catch (err) {
         // Handling errors and sending a 500 status code with an error message
-        res.status(500).json({ error: err });
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
+
+//Moongose
+// const putAccountEdit = async(req, res) => {
+//     try {
+//         // Extracting user ID from the session
+//         const userID = req.session.userId;
+//         const data = req.body;
+//         console.log(data);
+//         // Updating user data based on the user ID
+//         if (await User.findOneAndUpdate(userID, data)) {
+//             // Sending a success response if the update is complete
+//             res.status(200).json({ message: 'Update complete' });
+//         }
+//     } catch (err) {
+//         // Handling errors and sending a 400 status code with an error message
+//         res.status(400).json({ error: err });
+//     }
+// };
 
 const putAccountEdit = async(req, res) => {
     try {
@@ -278,16 +388,24 @@ const putAccountEdit = async(req, res) => {
         const userID = req.session.userId;
         const data = req.body;
         console.log(data);
+
         // Updating user data based on the user ID
-        if (await User.findOneAndUpdate(userID, data)) {
+        const [updatedRowsCount] = await User.update(data, { where: { id: userID } });
+
+        if (updatedRowsCount > 0) {
             // Sending a success response if the update is complete
             res.status(200).json({ message: 'Update complete' });
+        } else {
+            // Sending an error response if the user was not found or no update was made
+            res.status(404).json({ error: 'User not found or no update was made' });
         }
     } catch (err) {
         // Handling errors and sending a 400 status code with an error message
-        res.status(400).json({ error: err });
+        console.error(err);
+        res.status(400).json({ error: 'Update failed. Please try again.' });
     }
 };
+
 
 const getSeatSelect = async(req, res) => {
     try {

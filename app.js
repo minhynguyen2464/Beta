@@ -1,6 +1,7 @@
 // Importing necessary modules
 const express = require('express');
 const mongoose = require('mongoose');
+const sequelize = require('sequelize');
 const session = require('express-session');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -23,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB using the provided URI in the environment variables
 mongoose.connect(process.env.MONGODB_URI, {});
+
 
 // Setting up middleware
 app.use(logger('dev'));

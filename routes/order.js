@@ -11,6 +11,7 @@ const request = require('request');
 const moment = require('moment');
 const Booking = require('../models/booking.model');
 const Movie = require('../models/movie.model');
+const User = require('../models/user.model');
 var nodemailer = require('nodemailer');
 
 
@@ -102,9 +103,10 @@ const sendMailToClient = async(orderID, showtime) => {
     const booking = await Booking.findOne({ _id: orderID })
         .populate('movie')
         .populate('user');
+    const userID = booking.user
+    const user = await User.findByPk(userID);
     console.log(booking);
     const movie = booking.movie
-    const user = booking.user
     const number = booking.price;
     const formattedNumber = number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     var transporter = await nodemailer.createTransport({

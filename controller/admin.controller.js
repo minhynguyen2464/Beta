@@ -231,7 +231,7 @@ const deleteShowtimes = async(req, res) => {
 
 const getIndex = async(req, res) => {
     try {
-        const userCount = await User.countDocuments({ role: 'user' });
+        const userCount = await User.count({ where: { role: 'user' } });
         const ticketCount = await Booking.countDocuments({});
         const revenueArray = await Booking.find({}, {
                 price: 1,
