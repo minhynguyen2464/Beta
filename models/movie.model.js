@@ -52,6 +52,10 @@ const movieSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: Number,
+        required: true,
+    },
     showtimes: [showtimeSchema],
 });
 

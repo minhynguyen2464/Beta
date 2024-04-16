@@ -1,6 +1,7 @@
 // Importing necessary modules
 const express = require('express');
 const mongoose = require('mongoose');
+const sequelize = require('sequelize');
 const session = require('express-session');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -24,6 +25,7 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB using the provided URI in the environment variables
 mongoose.connect(process.env.MONGODB_URI, {});
 
+
 // Setting up middleware
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -31,11 +33,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // Parsing URL-encoded bodies
 app.use(express.json()); // Parsing JSON bodies
 app.use(
-	session({
-		secret: process.env.SESSION_SECRET, // Secret used to sign the session ID cookie
-		resave: true,
-		saveUninitialized: true,
-	})
+    session({
+        secret: process.env.SESSION_SECRET, // Secret used to sign the session ID cookie
+        resave: true,
+        saveUninitialized: true,
+    })
 );
 
 // Serving static files from the 'public' directory
@@ -52,5 +54,5 @@ app.use('/order', order);
 
 // Starting the server and listening on the specified port
 app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -30,10 +30,10 @@ router.get('/movie', userController.getMovie);
 
 router.get('/account/history', userController.getAccountHistory);
 
+router.get('/api/upcommingMovie', userController.getUpcommingMovie);
+
 // Default route to render the index page
-router.get('/', (req, res) => {
-    res.render('index');
-});
+router.get('/', userController.getIndex);
 
 
 // Exporting the router

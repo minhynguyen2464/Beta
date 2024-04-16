@@ -81,3 +81,29 @@
     width: 40px;
     color: white;
 }
+
+.user-counter {
+    height: 100%;
+    background-color: #218838;
+    padding: 20px;
+    color: white;
+}
+
+.money-counter {
+    height: 100%;
+    background-color: #DC3545;
+    padding: 20px;
+    color: white;
+}
+
+.ticket-counter {
+    height: 100%;
+    background-color: #007BFF;
+    padding: 20px;
+    color: white;
+}
+
+.nav-item a {
+    color: white;
+    font-weight: bold;
+}
