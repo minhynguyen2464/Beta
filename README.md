@@ -18,7 +18,6 @@
     <pre>
 <code>
 Beta/
-├── public/                 # Chứa các file tĩnh (CSS, JS, images, ...)
 ├── views/                  # Chứa các file EJS template
 ├── routes/                 # Chứa các file định tuyến của ứng dụng
 ├── models/                 # Chứa các file mô hình (Models) kết nối MongoDB
