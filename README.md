@@ -1,6 +1,6 @@
-<h1>Beta - Đồ án môn Lập trình tích hợp nâng cao</h1>
+<h1>Beta - Website Đặt Vé Xem Phim</h1>
     <h2>Mô tả dự án</h2>
-    <p>Beta là một đồ án môn Lập trình tích hợp nâng cao, được xây dựng theo mô hình MVC (Model-View-Controller). Dự án sử dụng các công nghệ hiện đại cho cả FrontEnd và BackEnd, nhằm tạo ra một ứng dụng web hoàn chỉnh.</p>
+    <p>Beta là một dự án website đặt vé xem phim, được xây dựng theo mô hình MVC (Model-View-Controller). Dự án sử dụng các công nghệ hiện đại cho cả FrontEnd và BackEnd, nhằm tạo ra một ứng dụng web hoàn chỉnh cho việc đặt vé xem phim trực tuyến.</p>
     <h2>Công nghệ sử dụng</h2>
     <h3>FrontEnd</h3>
     <ul>
@@ -52,8 +52,10 @@ PORT=3000</code></pre>
     <h2>Sử dụng</h2>
     <h3>Các tính năng chính</h3>
     <ul>
-        <li><strong>Tạo, đọc, cập nhật, xóa (CRUD)</strong>: Quản lý các đối tượng dữ liệu trong MongoDB.</li>
-        <li><strong>Giao diện người dùng động</strong>: Sử dụng EJS và Axios để tạo các trang web động và tương tác.</li>
+        <li><strong>Đặt vé xem phim trực tuyến</strong>: Người dùng có thể tìm kiếm phim, chọn lịch chiếu và đặt vé trực tuyến.</li>
+        <li><strong>Quản lý phim</strong>: Thêm, sửa, xóa thông tin phim.</li>
+        <li><strong>Quản lý lịch chiếu</strong>: Thêm, sửa, xóa lịch chiếu phim.</li>
+        <li><strong>Quản lý người dùng</strong>: Đăng ký, đăng nhập, quản lý thông tin cá nhân.</li>
     </ul>
     <h3>Thư mục public</h3>
     <p>Chứa các file tĩnh như CSS, JavaScript và hình ảnh.</p>
