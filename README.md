@@ -56,8 +56,6 @@ PORT=3000</code></pre>
         <li><strong>Quản lý lịch chiếu</strong>: Thêm, sửa, xóa lịch chiếu phim.</li>
         <li><strong>Quản lý người dùng</strong>: Đăng ký, đăng nhập, quản lý thông tin cá nhân.</li>
     </ul>
-    <h3>Thư mục public</h3>
-    <p>Chứa các file tĩnh như CSS, JavaScript và hình ảnh.</p>
     <h3>Thư mục views</h3>
     <p>Chứa các file EJS template để render các trang web.</p>
     <h3>Thư mục routes</h3>
@@ -74,6 +72,5 @@ PORT=3000</code></pre>
         <li>Đẩy nhánh lên (<code>git push origin feature/feature-name</code>).</li>
         <li>Tạo một Pull Request.</li>
     </ol>
-    <h2>Giấy phép</h2>
     <hr>
     <p>Cảm ơn bạn đã sử dụng và đóng góp cho dự án Beta!</p>
